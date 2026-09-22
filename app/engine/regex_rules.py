@@ -23,6 +23,7 @@ class PDRule:
     description: str
     priority: int = 50
     context_required: bool = False
+    use_group: int = 0  # Какую группу использовать для value/span (0 = весь match)
 
 
 # ---------------------------------------------------------------------------
@@ -124,7 +125,7 @@ ALL_RULES.append(PDRule(
 
 # С контекстом
 _BIRTH_DATE_CTX = re.compile(
-    r"(?:дата\s+рождения|д\.?\s?р\.?|родил(?:ся|ась)|born|ДР)"
+    r"(?:дата\s+рожд(?:ения|\.)?|д\.?\s?р\.?|родил(?:ся|ась)|рождён(?:а)?|born|ДР|р\.)"
     r"[\s:]*"
     r"(\d{1,2}[./-]\d{1,2}[./-]\d{4})",
     re.IGNORECASE,
@@ -139,7 +140,7 @@ ALL_RULES.append(PDRule(
 
 # Текстовая дата с контекстом: «родился 1 января 1990»
 _BIRTH_DATE_TEXT = re.compile(
-    r"(?:дата\s+рождения|д\.?\s?р\.?|родил(?:ся|ась)|born|ДР)"
+    r"(?:дата\s+рожд(?:ения|\.)?|д\.?\s?р\.?|родил(?:ся|ась)|рождён(?:а)?|born|ДР|р\.)"
     r"[\s:]*"
     rf"(\d{{1,2}}\s+{_MONTHS_RU}\s+\d{{4}}(?:\s*(?:г\.?|года?))?)",
     re.IGNORECASE,
@@ -152,12 +153,40 @@ ALL_RULES.append(PDRule(
     context_required=True,
 ))
 
+# Год рождения: «год рождения 1990»
+_BIRTH_YEAR = re.compile(
+    r"(?:год\s+рождения)"
+    r"[\s:]*"
+    r"(\d{4})\b",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="birth_date",
+    pattern=_BIRTH_YEAR,
+    description="Год рождения",
+    priority=60,
+    context_required=True,
+))
+
+# Дата рождения с постфиксом: «01.07.1980 г.р.»
+_BIRTH_DATE_SUFFIX = re.compile(
+    r"(\d{1,2}[./-]\d{1,2}[./-]\d{4})\s*г\.?\s*р\.?",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="birth_date",
+    pattern=_BIRTH_DATE_SUFFIX,
+    description="Дата рождения (постфикс г.р.)",
+    priority=80,
+    context_required=True,
+))
+
 # ===== 3. Место рождения (birth_place) =====================================
 
 _BIRTH_PLACE = re.compile(
     r"(?:место\s+рождения|родил(?:ся|ась)\s+в|уроженец|уроженка)"
     r"[\s:]*"
-    r"(.{5,80}?)(?:[,;.](?:\s|$)|\s*$)",
+    r"(.{5,80}?)(?=[,;.\n]|$)",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
@@ -168,13 +197,31 @@ ALL_RULES.append(PDRule(
     context_required=True,
 ))
 
+# Место рождения: «Родилась 10.12.1995 в г. Новосибирске» (дата между глаголом и местом)
+_BIRTH_PLACE_WITH_DATE = re.compile(
+    r"(?:родил(?:ся|ась))\s+\d{1,2}[./-]\d{1,2}[./-]\d{4}\s+в\s+"
+    r"(.{3,60}?)(?=[,;.\n]|$)",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="birth_place",
+    pattern=_BIRTH_PLACE_WITH_DATE,
+    description="Место рождения (после даты)",
+    priority=72,
+    context_required=True,
+    use_group=1,
+))
+
 # ===== 4. Паспорт (passport) ===============================================
 
-# С контекстом: «паспорт 4509 123456»
+# С контекстом: «паспорт 4509 123456», «паспорт серия 4525 номер 345678»
 _PASSPORT_CTX = re.compile(
-    r"(?:паспорт|серия(?:\s+и\s+номер)?|passport)"
-    r"[\s:]*"
-    r"(\d{2}\s?\d{2}\s?\d{6})",
+    r"(?:паспорт(?:а|ные\s+данные)?(?:\s+гражданина\s+РФ)?|серия(?:\s+и\s+номер)?|passport)"
+    r"[\s:,.]*"
+    r"(?:серия\s+)?"
+    r"(\d{2}\s*\d{2})"
+    r"\s*(?:номер|№)?\s*"
+    r"(\d{6})",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
@@ -185,9 +232,24 @@ ALL_RULES.append(PDRule(
     context_required=True,
 ))
 
-# Без контекста: формат «4509 123456» (4 + пробел + 6)
+# Слитный формат (10 цифр) с контекстом: «паспорт 4510123456»
+_PASSPORT_SOLID = re.compile(
+    r"(?:паспорт(?:а|ные\s+данные)?|passport)"
+    r"[\s:,.]*"
+    r"(\d{10})\b",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="passport",
+    pattern=_PASSPORT_SOLID,
+    description="Паспорт слитный (10 цифр) с контекстом",
+    priority=85,
+    context_required=True,
+))
+
+# Без контекста: формат «4509 123456» (4 + пробелы + 6)
 _PASSPORT_NO_CTX = re.compile(
-    r"\b(\d{4})\s(\d{6})\b",
+    r"\b(\d{4})\s+(\d{6})\b",
 )
 ALL_RULES.append(PDRule(
     category="passport",
@@ -199,7 +261,7 @@ ALL_RULES.append(PDRule(
 # ===== 5. Гражданство (citizenship) ========================================
 
 _CITIZENSHIP = re.compile(
-    r"(?:гражданство|гражданин|гражданка)"
+    r"(?:гражданство|гражданин|гражданка|подданство|подданный|подданная)"
     r"[\s:]*"
     r"(.{2,50}?)(?:[,;.](?:\s|$)|\s*$)",
     re.IGNORECASE,
@@ -215,10 +277,13 @@ ALL_RULES.append(PDRule(
 # ===== 6. Орган выдачи (issuing_authority) ==================================
 
 _ISSUING_AUTHORITY = re.compile(
-    r"(?:выдан)\s+"
-    r"((?:ОВД|УФМС|ОУФМС|МВД|ГУ МВД|отделом|отделением|УМВД|ТП).{5,120}?)"
-    r"(?:\d{2}\.\d{2}\.\d{4}|код\s+подразделения|$)",
-    re.IGNORECASE,
+    r"(?:(?:кем\s+)?выдан[оа]?|орган(?:\s+выдачи)?)"
+    r"[\s:]*"
+    r"((?:ОВД|[ОУ]?ФМС|УФМС|ОУФМС|МВД|ГУ\s+МВД|УМВД|ТП"
+    r"|[Оо]тдел(?:ом|ением|ение|а)?|[Уу]правлени(?:ем|е|я)?)"
+    r".{5,120}?)"
+    r"(?:\d{2}\.\d{2}\.\d{4}|код\s+подразделения|к/п|[,;.]|\s*$)",
+    re.IGNORECASE | re.MULTILINE,
 )
 ALL_RULES.append(PDRule(
     category="issuing_authority",
@@ -226,6 +291,36 @@ ALL_RULES.append(PDRule(
     description="Орган выдачи документа",
     priority=60,
     context_required=True,
+))
+
+# Орган выдачи — косвенная форма: «отделом УФМС», «отделением МВД»
+_ISSUING_AUTHORITY_INSTR = re.compile(
+    r"\b((?:[Оо]тдел(?:ом|ением)?|[Уу]правлением)"
+    r"\s+(?:[ОУ]?ФМС|УФМС|ОУФМС|МВД|ОВД|ГУ\s+МВД|УМВД)"
+    r"(?:\s+.{2,60}?)?)" 
+    r"(?=[,;.]|\s+к/?[\sп]|$)",
+    re.IGNORECASE | re.MULTILINE,
+)
+ALL_RULES.append(PDRule(
+    category="issuing_authority",
+    pattern=_ISSUING_AUTHORITY_INSTR,
+    description="Орган выдачи (косвенная форма)",
+    priority=58,
+    context_required=False,
+))
+
+# Орган выдачи — короткая форма: «ГУ МВД России по г. Москве» без «выдан»
+_ISSUING_AUTHORITY_SHORT = re.compile(
+    r"\b((?:ГУ\s+МВД|УМВД|МВД|ОВД|[ОУ]?ФМС|УФМС|ОУФМС)"
+    r"\s+(?:России\s+)?(?:по\s+)?(?:г\.|гор\.?)\s+[А-ЯЁ][а-яё]+(?:\s+[а-яё]+)*)",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="issuing_authority",
+    pattern=_ISSUING_AUTHORITY_SHORT,
+    description="Орган выдачи (краткая форма)",
+    priority=55,
+    context_required=False,
 ))
 
 # ===== 7. Код подразделения (subdivision_code) ==============================
@@ -257,7 +352,7 @@ ALL_RULES.append(PDRule(
 # ===== 8. Дата выдачи (issue_date) =========================================
 
 _ISSUE_DATE = re.compile(
-    r"(?:дата\s+выдачи|выдан)"
+    r"(?:дата\s+выдачи(?:\s+\w+)?|выдан[оа]?)"
     r"[\s:]*"
     r"(\d{1,2}[./-]\d{1,2}[./-]\d{4})",
     re.IGNORECASE,
@@ -270,19 +365,56 @@ ALL_RULES.append(PDRule(
     context_required=True,
 ))
 
+# Дата выдачи — дата рядом с «выдан» (дата после органа)
+# use_group=1 — в detector используется group(1) вместо group(0)
+_ISSUE_DATE_AFTER_ORG = re.compile(
+    r"(?:выдан[оа]?)\s+"
+    r"(?:[А-ЯЁа-яё0-9\s.,\-/()]+?)\s+"
+    r"(\d{1,2}[./-]\d{1,2}[./-]\d{4})",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="issue_date",
+    pattern=_ISSUE_DATE_AFTER_ORG,
+    description="Дата выдачи (после органа)",
+    priority=65,
+    context_required=True,
+    use_group=1,  # Только дата, не орган
+))
+
+# Дата выдачи текстом: «выдано 5 марта 2010 года»
+_ISSUE_DATE_TEXT = re.compile(
+    r"(?:дата\s+выдачи(?:\s+\w+)?|выдан[оа]?)"
+    r"[\s:]*"
+    rf"(\d{{1,2}}\s+{_MONTHS_RU}\s+\d{{4}}(?:\s*(?:г\.?|года?))?)",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="issue_date",
+    pattern=_ISSUE_DATE_TEXT,
+    description="Дата выдачи документа (текстом)",
+    priority=70,
+    context_required=True,
+))
+
 # ===== 9. Водительское удостоверение (drivers_license) ======================
 
 _DRIVERS_LICENSE = re.compile(
-    r"(?:водительское\s+удостоверение|в/?у\b|ВУ\b)"
-    r"[\s:]*"
-    r"(\d{2}\s?[А-ЯA-Z]{2}\s?\d{6}|\d{4}\s?\d{6})",
+    r"(?:водительск(?:ое\s+удостоверение|(?:ого\s+удостоверения)|ие\s+права)|удостоверение\s+водителя"
+    r"|в/?у\b|ВУ\b|права\b)"
+    r"(?:\s+сери[ияей]+)?"
+    r"[\s:№#]*"
+    r"(?:(?:серия\s+)?\d{2}\s+\d{2}\s+(?:(?:номер|№)\s*)?\d{6}"
+    r"|(?:серия\s+)?\d{2}\s*\d{2}\s*(?:(?:номер|№)\s*)?\d{6}"
+    r"|\d{2}\s?[А-ЯA-Z]{2}\s?\d{6}"
+    r"|\d{4}\s?\d{6})",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
     category="drivers_license",
     pattern=_DRIVERS_LICENSE,
     description="Водительское удостоверение",
-    priority=80,
+    priority=92,
     context_required=True,
 ))
 
@@ -303,6 +435,37 @@ ALL_RULES.append(PDRule(
     pattern=_ADDRESS_STREET,
     description="Адрес (ул./пр./пер. ...)",
     priority=60,
+))
+
+# Адрес: Название + тип улицы (обратный порядок, напр. "Красный проспект, д. 50")
+_ADDRESS_STREET_REV = re.compile(
+    rf"(?:(?:г\.|город)\s+[А-ЯЁа-яё\-]+[\s,]*?)?"
+    rf"[А-ЯЁ][а-яё]+(?:\s+[а-яё]+)?\s+(?:проспект|бульвар|шоссе|набережная|площадь|переулок)"
+    rf"(?:,?\s*(?:д\.|дом)\s*\d+[А-Яа-яA-Za-z]?"
+    rf"(?:(?:,?\s*(?:корп?\.| корпус)\s*\d+)?"
+    rf"(?:,?\s*(?:кв\.|квартира|оф\.|офис)\s*\d+)?)?)?" ,
+    re.IGNORECASE | re.UNICODE,
+)
+ALL_RULES.append(PDRule(
+    category="address",
+    pattern=_ADDRESS_STREET_REV,
+    description="Адрес (Название + тип улицы)",
+    priority=58,
+))
+
+# Адрес с контекстным словом: "адрес: г. Город, ..."
+_ADDRESS_CTX = re.compile(
+    r"(?:адрес|проживает|зарегистрирован[аы]?)\s*[:.]?\s*"
+    r"((?:г\.|город)\s+[А-ЯЁ][а-яё\-]+.{5,100}?)"
+    r"(?=\s*$|\n|\s*(?:Тел|тел|Телефон|телефон|Email|email|E-mail|Карта|карта|Гражданство|гражданство|СНИЛС|ИНН))",
+    re.IGNORECASE | re.UNICODE,
+)
+ALL_RULES.append(PDRule(
+    category="address",
+    pattern=_ADDRESS_CTX,
+    description="Адрес с контекстным словом",
+    priority=62,
+    context_required=True,
 ))
 
 # Адрес с указанием города + области
@@ -332,6 +495,18 @@ ALL_RULES.append(PDRule(
     description="Почтовый индекс с контекстом",
     priority=50,
     context_required=True,
+))
+
+# Адрес: индекс + город
+_ADDRESS_ZIP_CITY = re.compile(
+    r"\b(\d{6}),?\s*(?:г\.|город)\s+[А-ЯЁ][а-яё]+(?:\s*,\s*.{5,80})?",
+    re.UNICODE,
+)
+ALL_RULES.append(PDRule(
+    category="address",
+    pattern=_ADDRESS_ZIP_CITY,
+    description="Адрес (индекс + город)",
+    priority=65,
 ))
 
 # ===== 11. Email ============================================================
@@ -372,6 +547,7 @@ ALL_RULES.append(PDRule(
 # ИНН физлица (12 цифр) с контекстом
 _INN_12_CTX = re.compile(
     r"(?:инн|ИНН|inn)"
+    r"(?:\s+\w+)?"
     r"[\s:]*"
     r"(\d{12})\b",
     re.IGNORECASE,
@@ -387,6 +563,7 @@ ALL_RULES.append(PDRule(
 # ИНН юрлица (10 цифр) с контекстом
 _INN_10_CTX = re.compile(
     r"(?:инн|ИНН|inn)"
+    r"(?:\s+\w+)?"
     r"[\s:]*"
     r"(\d{10})\b",
     re.IGNORECASE,
@@ -425,9 +602,9 @@ ALL_RULES.append(PDRule(
 # ===== 15. CVV / CVC (cvv) =================================================
 
 _CVV = re.compile(
-    r"(?:CVV|CVC|CV2)"
+    r"(?:CVV2?|CVC2?|CV2|код\s+безопасности)"
     r"[\s/:]*"
-    r"(\d{3})",
+    r"(\d{3})\b",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
@@ -441,7 +618,7 @@ ALL_RULES.append(PDRule(
 # ===== 16. ПИН-код (pin) ===================================================
 
 _PIN = re.compile(
-    r"(?:пин[\s\-]*код|ПИН|PIN)"
+    r"(?:(?:пин|PIN)[\s\-]*код|ПИН|PIN)"
     r"[\s/:]*"
     r"(\d{4})\b",
     re.IGNORECASE,
@@ -457,9 +634,9 @@ ALL_RULES.append(PDRule(
 # ===== 17. Имя держателя карты (cardholder_name) ===========================
 
 _CARDHOLDER = re.compile(
-    r"(?:cardholder|держатель|имя\s+на\s+карте)"
+    r"(?:cardholder|держатель|имя\s+на\s+карте|карта)"
     r"[\s/:]*"
-    r"([A-Z][A-Z\s]{2,30})",
+    r"([A-Z]{2,20}(?:\s+[A-Z]{2,20}){1,2}(?:\s+[A-Z])?)",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
@@ -468,6 +645,17 @@ ALL_RULES.append(PDRule(
     description="Имя держателя карты",
     priority=70,
     context_required=True,
+))
+
+# Имя держателя (латиница без контекста) — low priority
+_CARDHOLDER_BARE = re.compile(
+    r"\b([A-Z]{2,20}\s+[A-Z]{2,20}(?:\s+[A-Z])?)\b",
+)
+ALL_RULES.append(PDRule(
+    category="cardholder_name",
+    pattern=_CARDHOLDER_BARE,
+    description="Имя держателя карты (латиница без контекста)",
+    priority=25,
 ))
 
 # ===== 18. СНИЛС (snils) ===================================================
@@ -501,8 +689,18 @@ ALL_RULES.append(PDRule(
 # ===== 19. Полис ОМС (oms) =================================================
 
 _OMS = re.compile(
-    r"(?:ОМС|полис|медицинск(?:ий|ого)\s+полис(?:а)?)"
-    r"[\s:]*"
+    r"(?:"
+        r"(?:полис|номер)\s+(?:обязательного\s+медицинского\s+страхования|ОМС)"
+        r"|ОМС"
+        r"|медицинск(?:ий|ого)\s+полис(?:а)?"
+        r"|мед\.\s*полис"
+        r"|номер\s+полиса\s+ОМС"
+        r"|полис\s+ОМС"
+        r"|номер\s+ОМС"
+        r"|полис"
+    r")"
+    r"(?:\s+(?:нового\s+образца|пациента|работника|сотрудника))?"
+    r"[\s:№#]*"
     r"(\d{16})\b",
     re.IGNORECASE,
 )
@@ -510,16 +708,18 @@ ALL_RULES.append(PDRule(
     category="oms",
     pattern=_OMS,
     description="Полис ОМС (16 цифр)",
-    priority=80,
+    priority=95,
     context_required=True,
 ))
 
 # ===== 20. Загранпаспорт (foreign_passport) ================================
 
 _FOREIGN_PASSPORT = re.compile(
-    r"(?:загранпаспорт|заграничн(?:ый|ого)\s+паспорт(?:а)?)"
-    r"[\s:]*"
-    r"(\d{2}\s?(?:№|No|N|#)?\s?\d{7})",
+    r"(?:загран(?:ичн(?:ый|ого))?\s*\.?\s*паспорт(?:а)?|загранпаспорт|загран\b|з/п\b)"
+    r"(?:\s+(?:РФ|нового\s+образца))?"
+    r"[\s:№#]*"
+    r"(?:(?:серия\s+)?\d{2}\s*(?:(?:номер|№|No|N|#)\s*)?\d{7}"
+    r"|\d{2}\s?\d{7})",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
@@ -533,9 +733,12 @@ ALL_RULES.append(PDRule(
 # ===== 21. Военный билет (military_id) =====================================
 
 _MILITARY_ID = re.compile(
-    r"(?:военный\s+билет|в/?б)"
-    r"[\s:]*"
-    r"([А-ЯA-Z]{2}\s?\d{7})",
+    r"(?:военн(?:ый|ого)\s+билет(?:а)?|воен\.\s*билет|в/?б)"
+    r"[\s:№#]*"
+    r"(?:сери[яи]\s+)?"
+    r"[А-ЯA-Z]{2}"
+    r"\s*(?:(?:номер|№)\s*)?"
+    r"\d{7}",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
