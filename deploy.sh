@@ -90,6 +90,7 @@ info "Шаг 2/5: Клонирование репозитория..."
 
 if [[ -d "$APP_DIR/.git" ]]; then
     warn "Каталог $APP_DIR уже существует — обновляю (git pull)"
+    git config --global --add safe.directory "$APP_DIR"
     cd "$APP_DIR"
     git fetch origin
     git reset --hard "origin/$BRANCH"
