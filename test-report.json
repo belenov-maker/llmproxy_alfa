@@ -1,0 +1,3629 @@
+{
+  "server": "http://localhost:8080",
+  "timestamp": "2026-09-22T18:57:19.574777",
+  "total_time_s": 10.76,
+  "summary": {
+    "total": 1055,
+    "passed": 609,
+    "failed": 446
+  },
+  "by_category": {
+    "A": {
+      "total": 390,
+      "passed": 226,
+      "failed": 164,
+      "avg_ms": 21.36
+    },
+    "B": {
+      "total": 105,
+      "passed": 68,
+      "failed": 37,
+      "avg_ms": 45.96
+    },
+    "C": {
+      "total": 130,
+      "passed": 0,
+      "failed": 130,
+      "avg_ms": 10.55
+    },
+    "D": {
+      "total": 200,
+      "passed": 150,
+      "failed": 50,
+      "avg_ms": 28.2
+    },
+    "E": {
+      "total": 130,
+      "passed": 65,
+      "failed": 65,
+      "avg_ms": 2.02
+    },
+    "F": {
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "avg_ms": 0
+    }
+  },
+  "load_test": {
+    "duration_s": 10,
+    "total_requests": 69261,
+    "errors": 168,
+    "rps": 6926.1,
+    "avg_ms": 14.44,
+    "p50_ms": 13.39,
+    "p95_ms": 21.64,
+    "p99_ms": 27.87,
+    "max_ms": 73.9
+  },
+  "failures": [
+    {
+      "name": "test_pass_word",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 49.03,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pass_sent",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 74.48,
+      "detail": "missing categories: {'passport'}",
+      "error": null
+    },
+    {
+      "name": "test_pass_3",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 31.85,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pass_lc",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 40.28,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pass_ml",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 81.95,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pass_dash",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 39.02,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pass_hash",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 78.08,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pass_comma",
+      "cat": "A",
+      "sub": "passport",
+      "ms": 65.21,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_snils_sp",
+      "cat": "A",
+      "sub": "snils",
+      "ms": 53.3,
+      "detail": "missing categories: {'snils'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_inn_ent2",
+      "cat": "A",
+      "sub": "inn",
+      "ms": 67.39,
+      "detail": "missing categories: {'inn'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_inn_kpp",
+      "cat": "A",
+      "sub": "inn",
+      "ms": 10.07,
+      "detail": "missing categories: {'inn'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_inn_ent3",
+      "cat": "A",
+      "sub": "inn",
+      "ms": 51.99,
+      "detail": "missing categories: {'inn'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_inn_hash",
+      "cat": "A",
+      "sub": "inn",
+      "ms": 9.55,
+      "detail": "missing categories: {'inn'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_ph_dot",
+      "cat": "A",
+      "sub": "phone",
+      "ms": 5.64,
+      "detail": "missing categories: {'phone'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_card_amex",
+      "cat": "A",
+      "sub": "card_number",
+      "ms": 12.7,
+      "detail": "missing categories: {'card_number'}",
+      "error": null
+    },
+    {
+      "name": "test_addr_pr",
+      "cat": "A",
+      "sub": "address",
+      "ms": 42.77,
+      "detail": "missing categories: {'address'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_addr_bul",
+      "cat": "A",
+      "sub": "address",
+      "ms": 7.81,
+      "detail": "missing categories: {'address'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_addr_der",
+      "cat": "A",
+      "sub": "address",
+      "ms": 7.7,
+      "detail": "missing categories: {'address'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_bd_iso",
+      "cat": "A",
+      "sub": "birth_date",
+      "ms": 44.33,
+      "detail": "missing categories: {'birth_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_bd_mtxt",
+      "cat": "A",
+      "sub": "birth_date",
+      "ms": 45.5,
+      "detail": "missing categories: {'birth_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_bd_fio",
+      "cat": "A",
+      "sub": "birth_date",
+      "ms": 4.72,
+      "detail": "missing categories: {'birth_date'}",
+      "error": null
+    },
+    {
+      "name": "test_bd_dec",
+      "cat": "A",
+      "sub": "birth_date",
+      "ms": 11.89,
+      "detail": "missing categories: {'birth_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_oms_sp",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 7.94,
+      "detail": "missing categories: {'oms'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_oms_full",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 44.27,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_oms_sent",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 6.8,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_oms_lab",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 9.94,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_oms_name",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 8.68,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_oms_ml",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 44.99,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_oms_dash",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 9.28,
+      "detail": "missing categories: {'oms'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_oms_paren",
+      "cat": "A",
+      "sub": "oms",
+      "ms": 45.44,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_dl_std",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 5.44,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_ctx",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 45.34,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_sent",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 8.58,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_short",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 6.2,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_2",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 44.16,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_3",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 6.98,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_ml",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 5.25,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_ctx2",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 43.25,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_lc",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 6.6,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_fio",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 7.62,
+      "detail": "missing categories: {'drivers_license'}",
+      "error": null
+    },
+    {
+      "name": "test_dl_exp",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 4.88,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_cat",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 42.34,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_intl",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 5.3,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_dl_num",
+      "cat": "A",
+      "sub": "drivers_license",
+      "ms": 5.39,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_fp_ctx",
+      "cat": "A",
+      "sub": "foreign_passport",
+      "ms": 4.64,
+      "detail": "missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_fp_trv",
+      "cat": "A",
+      "sub": "foreign_passport",
+      "ms": 4.23,
+      "detail": "missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_fp_hash",
+      "cat": "A",
+      "sub": "foreign_passport",
+      "ms": 3.85,
+      "detail": "missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_fp_old",
+      "cat": "A",
+      "sub": "foreign_passport",
+      "ms": 4.33,
+      "detail": "missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_fp_child",
+      "cat": "A",
+      "sub": "foreign_passport",
+      "ms": 4.02,
+      "detail": "missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_mil_ctx",
+      "cat": "A",
+      "sub": "military_id",
+      "ms": 4.11,
+      "detail": "missing categories: {'military_id'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_mil_3",
+      "cat": "A",
+      "sub": "military_id",
+      "ms": 8.92,
+      "detail": "missing categories: {'military_id'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_mil_con",
+      "cat": "A",
+      "sub": "military_id",
+      "ms": 4.75,
+      "detail": "missing categories: {'military_id'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_mil_res",
+      "cat": "A",
+      "sub": "military_id",
+      "ms": 43.3,
+      "detail": "missing categories: {'military_id'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_cvv_2",
+      "cat": "A",
+      "sub": "cvv",
+      "ms": 9.2,
+      "detail": "missing categories: {'cvv'}",
+      "error": null
+    },
+    {
+      "name": "test_cvv_3",
+      "cat": "A",
+      "sub": "cvv",
+      "ms": 11.06,
+      "detail": "missing categories: {'cvv'}",
+      "error": null
+    },
+    {
+      "name": "test_cvv_sec",
+      "cat": "A",
+      "sub": "cvv",
+      "ms": 8.94,
+      "detail": "missing categories: {'cvv'}",
+      "error": null
+    },
+    {
+      "name": "test_cvv_sc",
+      "cat": "A",
+      "sub": "cvv",
+      "ms": 9.0,
+      "detail": "missing categories: {'cvv'}",
+      "error": null
+    },
+    {
+      "name": "test_pin_sent",
+      "cat": "A",
+      "sub": "pin",
+      "ms": 9.83,
+      "detail": "missing categories: {'pin'}",
+      "error": null
+    },
+    {
+      "name": "test_pin_sms",
+      "cat": "A",
+      "sub": "pin",
+      "ms": 45.13,
+      "detail": "missing categories: {'pin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_pin_ctx",
+      "cat": "A",
+      "sub": "pin",
+      "ms": 8.49,
+      "detail": "missing categories: {'pin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_idate_ctx",
+      "cat": "A",
+      "sub": "issue_date",
+      "ms": 43.75,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_idate_pass",
+      "cat": "A",
+      "sub": "issue_date",
+      "ms": 7.24,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_idate_long",
+      "cat": "A",
+      "sub": "issue_date",
+      "ms": 6.72,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_idate_iso",
+      "cat": "A",
+      "sub": "issue_date",
+      "ms": 44.16,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_idate_feb",
+      "cat": "A",
+      "sub": "issue_date",
+      "ms": 9.41,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_idate_long2",
+      "cat": "A",
+      "sub": "issue_date",
+      "ms": 44.05,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_iauth_guvd",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 6.63,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_iauth_ufms",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 43.41,
+      "detail": "missing categories: {'issuing_authority'}",
+      "error": null
+    },
+    {
+      "name": "test_iauth_sent",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 9.5,
+      "detail": "missing categories: {'issuing_authority'}",
+      "error": null
+    },
+    {
+      "name": "test_iauth_ml",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 8.86,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_iauth_ps",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 5.15,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_iauth_full",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 9.88,
+      "detail": "missing categories: {'issuing_authority'}",
+      "error": null
+    },
+    {
+      "name": "test_iauth_fms",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 4.77,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_iauth_gumvd",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 42.0,
+      "detail": "missing categories: {'issuing_authority'}",
+      "error": null
+    },
+    {
+      "name": "test_iauth_oufms",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 6.66,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_iauth_tp",
+      "cat": "A",
+      "sub": "issuing_authority",
+      "ms": 8.16,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_subc_noD",
+      "cat": "A",
+      "sub": "subdivision_code",
+      "ms": 4.41,
+      "detail": "missing categories: {'subdivision_code'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_subc_hash",
+      "cat": "A",
+      "sub": "subdivision_code",
+      "ms": 42.05,
+      "detail": "missing categories: {'subdivision_code'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_ctx",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 10.89,
+      "detail": "missing categories: {'cardholder_name'}",
+      "error": null
+    },
+    {
+      "name": "test_chn_sent",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 8.53,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_mr",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 6.76,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_ms",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 7.22,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_dbl",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 41.81,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_2",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 7.03,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_card",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 9.68,
+      "detail": "missing categories: {'cardholder_name'}",
+      "error": null
+    },
+    {
+      "name": "test_chn_mc",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 9.59,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_mir",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 41.66,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_chn_slash",
+      "cat": "A",
+      "sub": "cardholder_name",
+      "ms": 5.33,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_cit_none",
+      "cat": "A",
+      "sub": "citizenship",
+      "ms": 7.43,
+      "detail": "missing categories: {'citizenship'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_sav",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 7.09,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_biz",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 11.34,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_corr",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 6.42,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_ctx",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 7.34,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_fmt",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 46.57,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_bik",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 5.28,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_dep",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 9.64,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_loan",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 45.65,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_card",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 6.46,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_ip",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 4.39,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_budget",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 8.65,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_ml",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 5.71,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_transit",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 44.22,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_iban",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 3.18,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_acc_multi",
+      "cat": "A",
+      "sub": "account_number",
+      "ms": 6.48,
+      "detail": "missing categories: {'account_number'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_std",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 3.79,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_ru",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 2.38,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_low",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 42.12,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_pts",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 3.09,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_ctx",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 3.3,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_no",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 5.89,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_sts",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 3.74,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_enc",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 3.15,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_ins",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 4.32,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_dtp",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 4.52,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_ml",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 2.99,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_mixed",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 40.48,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_17",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 4.37,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_short",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 2.34,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_vin_report",
+      "cat": "A",
+      "sub": "vin",
+      "ms": 2.12,
+      "detail": "missing categories: {'vin'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_std",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.35,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_region",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 2.23,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_ctx",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.92,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_full",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 2.72,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_low",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 38.24,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_space",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 2.05,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_trailer",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 2.08,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_taxi",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 38.01,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_ml",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.71,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_dtp",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 2.71,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_fine",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.16,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_ins",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.4,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_park",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.41,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_cam",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 2.05,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_lp_multi",
+      "cat": "A",
+      "sub": "license_plate",
+      "ms": 3.09,
+      "detail": "missing categories: {'license_plate'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_rec",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 2.95,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_diag",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 5.24,
+      "detail": "missing categories: {'medical'}",
+      "error": null
+    },
+    {
+      "name": "test_med_hist",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 2.87,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_lab",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 38.99,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_dms",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 2.63,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_ref",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 39.46,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_rx",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 3.71,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_cert",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 4.84,
+      "detail": "missing categories: {'medical'}",
+      "error": null
+    },
+    {
+      "name": "test_med_vacc",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 3.32,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_amb",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 3.39,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_blood",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 4.52,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_oper",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 3.56,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_med_epi",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 5.04,
+      "detail": "missing categories: {'medical'}",
+      "error": null
+    },
+    {
+      "name": "test_med_ml",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 4.18,
+      "detail": "missing categories: {'medical'}",
+      "error": null
+    },
+    {
+      "name": "test_med_disch",
+      "cat": "A",
+      "sub": "medical",
+      "ms": 3.01,
+      "detail": "missing categories: {'medical'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_dipl",
+      "cat": "A",
+      "sub": "education",
+      "ms": 37.4,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_attest",
+      "cat": "A",
+      "sub": "education",
+      "ms": 4.78,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_stud",
+      "cat": "A",
+      "sub": "education",
+      "ms": 2.81,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_zach",
+      "cat": "A",
+      "sub": "education",
+      "ms": 36.9,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_cert",
+      "cat": "A",
+      "sub": "education",
+      "ms": 3.31,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_cand",
+      "cat": "A",
+      "sub": "education",
+      "ms": 4.08,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_doc",
+      "cat": "A",
+      "sub": "education",
+      "ms": 3.03,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_prof",
+      "cat": "A",
+      "sub": "education",
+      "ms": 1.94,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_school",
+      "cat": "A",
+      "sub": "education",
+      "ms": 2.12,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_ctx",
+      "cat": "A",
+      "sub": "education",
+      "ms": 2.52,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_ml",
+      "cat": "A",
+      "sub": "education",
+      "ms": 2.55,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_red",
+      "cat": "A",
+      "sub": "education",
+      "ms": 35.12,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_tech",
+      "cat": "A",
+      "sub": "education",
+      "ms": 35.07,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_mba",
+      "cat": "A",
+      "sub": "education",
+      "ms": 1.46,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_edu_multi",
+      "cat": "A",
+      "sub": "education",
+      "ms": 2.92,
+      "detail": "missing categories: {'education'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_1",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 2.44,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_2",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 1.18,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_3",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 34.44,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_4",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 3.07,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_5",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 1.12,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_6",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 2.85,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_7",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 1.23,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_8",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 1.99,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_9",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 33.75,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_empty_10",
+      "cat": "B",
+      "sub": "empty",
+      "ms": 1.73,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_unicode_3",
+      "cat": "B",
+      "sub": "unicode",
+      "ms": 4.45,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_unicode_9",
+      "cat": "B",
+      "sub": "unicode",
+      "ms": 6.27,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_json_3",
+      "cat": "B",
+      "sub": "json",
+      "ms": 66.01,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_1",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 68.35,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_2",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 88.43,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_3",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 65.5,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_4",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 67.13,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_5",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 68.0,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_6",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 71.91,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_7",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 74.28,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_8",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 75.19,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_9",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 6.52,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_idem_2nd_10",
+      "cat": "B",
+      "sub": "idempotency",
+      "ms": 78.1,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_unmask_1_undo",
+      "cat": "B",
+      "sub": "unmask",
+      "ms": 79.25,
+      "detail": "action: expected=unmasked, got=",
+      "error": null
+    },
+    {
+      "name": "test_b_unmask_2_undo",
+      "cat": "B",
+      "sub": "unmask",
+      "ms": 81.7,
+      "detail": "action: expected=unmasked, got=",
+      "error": null
+    },
+    {
+      "name": "test_b_unmask_3_undo",
+      "cat": "B",
+      "sub": "unmask",
+      "ms": 9.42,
+      "detail": "action: expected=unmasked, got=",
+      "error": null
+    },
+    {
+      "name": "test_b_unmask_4_undo",
+      "cat": "B",
+      "sub": "unmask",
+      "ms": 8.11,
+      "detail": "action: expected=unmasked, got=",
+      "error": null
+    },
+    {
+      "name": "test_b_unmask_5_undo",
+      "cat": "B",
+      "sub": "unmask",
+      "ms": 7.87,
+      "detail": "action: expected=unmasked, got=",
+      "error": null
+    },
+    {
+      "name": "test_b_len_1char",
+      "cat": "B",
+      "sub": "boundary",
+      "ms": 4.82,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_len_exact10",
+      "cat": "B",
+      "sub": "boundary",
+      "ms": 1.82,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_len_1k",
+      "cat": "B",
+      "sub": "boundary",
+      "ms": 2.32,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_len_10k",
+      "cat": "B",
+      "sub": "boundary",
+      "ms": 10.65,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_len_100k",
+      "cat": "B",
+      "sub": "boundary",
+      "ms": 96.26,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_b_enc_2",
+      "cat": "B",
+      "sub": "encoding",
+      "ms": 100.44,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_enc_5",
+      "cat": "B",
+      "sub": "encoding",
+      "ms": 93.89,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_case_1",
+      "cat": "B",
+      "sub": "case",
+      "ms": 44.45,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_b_case_7",
+      "cat": "B",
+      "sub": "case",
+      "ms": 6.91,
+      "detail": "pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_1",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 7.76,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_2",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 45.55,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_3",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 6.76,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_4",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 44.27,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_5",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 7.38,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_6",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 45.53,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_7",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 44.44,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_8",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 6.0,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_9",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 5.93,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_10",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 44.07,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_11",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 4.68,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_12",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 44.5,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_13",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 3.15,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_14",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 4.06,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_15",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 41.57,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_16",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 5.52,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=2",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_17",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 5.7,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_18",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 7.32,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_19",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 7.83,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_famous_20",
+      "cat": "C",
+      "sub": "famous",
+      "ms": 7.98,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_1",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 40.29,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_2",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 7.0,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_3",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 39.0,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_4",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 39.92,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_5",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 3.92,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_6",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 3.73,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_7",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 39.09,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_8",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 2.06,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_9",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 37.37,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_10",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 1.71,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_11",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 1.6,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_12",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 1.58,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_13",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 36.42,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_14",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 1.61,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_number_15",
+      "cat": "C",
+      "sub": "numbers",
+      "ms": 2.86,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_1",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.07,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_2",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 7.77,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_3",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.21,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_4",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.74,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_5",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 5.1,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_date_6",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 34.89,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_7",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 5.0,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_8",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 6.53,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_9",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.89,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_10",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 32.82,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_11",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.57,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_12",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 5.47,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_13",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.7,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_14",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 3.29,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_date_15",
+      "cat": "C",
+      "sub": "dates",
+      "ms": 31.02,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_1",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 3.8,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_2",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 1.97,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_3",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 29.72,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_4",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 3.14,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_5",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 3.26,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_6",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 3.12,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_7",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 4.44,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_8",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 4.02,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_9",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 28.43,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_10",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 4.31,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_11",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 2.37,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_12",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 4.61,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_13",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 3.25,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_14",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 3.06,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_misc_15",
+      "cat": "C",
+      "sub": "misc",
+      "ms": 27.43,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_1",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 27.19,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_2",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 2.5,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_3",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 2.79,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_4",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 4.18,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_5",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 2.4,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_6",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 4.11,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_7",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 3.05,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_8",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 25.01,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_9",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 2.71,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_10",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 24.41,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_11",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 2.92,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_12",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 3.06,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_13",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 3.14,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_14",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 3.21,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_tech_15",
+      "cat": "C",
+      "sub": "tech",
+      "ms": 3.16,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_1",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 3.28,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_2",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 4.23,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_3",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 23.64,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_4",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 3.14,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_5",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 23.21,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_6",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 3.76,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_7",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 3.1,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_8",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 22.18,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_9",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 2.97,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_legal_10",
+      "cat": "C",
+      "sub": "legal",
+      "ms": 3.27,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_1",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 2.68,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_2",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 2.96,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_3",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 2.66,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_4",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 3.13,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_5",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 2.73,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_6",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 3.06,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_7",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 20.56,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_8",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 2.63,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_9",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 2.09,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_med_10",
+      "cat": "C",
+      "sub": "medical",
+      "ms": 19.44,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_1",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.96,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_2",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 21.75,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_3",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.83,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_4",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.89,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_5",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 3.59,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_6",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.84,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_7",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 4.95,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_8",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.78,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_9",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 5.3,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_10",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 23.01,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_11",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.67,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_12",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 8.96,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_13",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.63,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_14",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 1.92,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_geo_15",
+      "cat": "C",
+      "sub": "geography",
+      "ms": 9.68,
+      "detail": "action: expected=cached, got=masked; false positive: pd_count=1",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_1",
+      "cat": "C",
+      "sub": "education",
+      "ms": 9.57,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_2",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.8,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_3",
+      "cat": "C",
+      "sub": "education",
+      "ms": 22.03,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_4",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.98,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_5",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.88,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_6",
+      "cat": "C",
+      "sub": "education",
+      "ms": 2.08,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_7",
+      "cat": "C",
+      "sub": "education",
+      "ms": 2.1,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_8",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.73,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_9",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.95,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_10",
+      "cat": "C",
+      "sub": "education",
+      "ms": 9.69,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_11",
+      "cat": "C",
+      "sub": "education",
+      "ms": 20.05,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_12",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.91,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_13",
+      "cat": "C",
+      "sub": "education",
+      "ms": 2.0,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_14",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.82,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_c_edu_15",
+      "cat": "C",
+      "sub": "education",
+      "ms": 1.9,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_d_contr_9",
+      "cat": "D",
+      "sub": "contract",
+      "ms": 19.95,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_contr_11",
+      "cat": "D",
+      "sub": "contract",
+      "ms": 33.45,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_contr_17",
+      "cat": "D",
+      "sub": "contract",
+      "ms": 9.34,
+      "detail": "missing categories: {'inn'}; pd_count: expected>=2, got=1",
+      "error": null
+    },
+    {
+      "name": "test_d_contr_23",
+      "cat": "D",
+      "sub": "contract",
+      "ms": 9.46,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_contr_28",
+      "cat": "D",
+      "sub": "contract",
+      "ms": 44.5,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_contr_30",
+      "cat": "D",
+      "sub": "contract",
+      "ms": 16.77,
+      "detail": "missing categories: {'passport'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_3",
+      "cat": "D",
+      "sub": "form",
+      "ms": 50.74,
+      "detail": "missing categories: {'birth_place'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_4",
+      "cat": "D",
+      "sub": "form",
+      "ms": 53.05,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=5, got=4",
+      "error": null
+    },
+    {
+      "name": "test_d_form_5",
+      "cat": "D",
+      "sub": "form",
+      "ms": 20.57,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_form_7",
+      "cat": "D",
+      "sub": "form",
+      "ms": 19.96,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_8",
+      "cat": "D",
+      "sub": "form",
+      "ms": 56.34,
+      "detail": "missing categories: {'citizenship'}",
+      "error": null
+    },
+    {
+      "name": "test_d_form_11",
+      "cat": "D",
+      "sub": "form",
+      "ms": 65.98,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_form_15",
+      "cat": "D",
+      "sub": "form",
+      "ms": 71.18,
+      "detail": "missing categories: {'inn'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_form_16",
+      "cat": "D",
+      "sub": "form",
+      "ms": 21.54,
+      "detail": "missing categories: {'address'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_17",
+      "cat": "D",
+      "sub": "form",
+      "ms": 72.41,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=5, got=4",
+      "error": null
+    },
+    {
+      "name": "test_d_form_18",
+      "cat": "D",
+      "sub": "form",
+      "ms": 74.21,
+      "detail": "missing categories: {'citizenship'}",
+      "error": null
+    },
+    {
+      "name": "test_d_form_22",
+      "cat": "D",
+      "sub": "form",
+      "ms": 24.35,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_24",
+      "cat": "D",
+      "sub": "form",
+      "ms": 78.05,
+      "detail": "missing categories: {'citizenship', 'birth_place'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_27",
+      "cat": "D",
+      "sub": "form",
+      "ms": 17.49,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_form_30",
+      "cat": "D",
+      "sub": "form",
+      "ms": 18.84,
+      "detail": "missing categories: {'address', 'citizenship', 'birth_place'}; pd_count: expected>=5, got=4",
+      "error": null
+    },
+    {
+      "name": "test_d_multi_6",
+      "cat": "D",
+      "sub": "multi_person",
+      "ms": 20.18,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=6, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_multi_10",
+      "cat": "D",
+      "sub": "multi_person",
+      "ms": 11.76,
+      "detail": "missing categories: {'foreign_passport'}; pd_count: expected>=6, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_multi_14",
+      "cat": "D",
+      "sub": "multi_person",
+      "ms": 11.99,
+      "detail": "missing categories: {'birth_date'}; pd_count: expected>=5, got=4",
+      "error": null
+    },
+    {
+      "name": "test_d_multi_15",
+      "cat": "D",
+      "sub": "multi_person",
+      "ms": 66.67,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=6, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_multi_18",
+      "cat": "D",
+      "sub": "multi_person",
+      "ms": 12.52,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_mix_2",
+      "cat": "D",
+      "sub": "mixed",
+      "ms": 67.54,
+      "detail": "missing categories: {'birth_date'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_mix_8",
+      "cat": "D",
+      "sub": "mixed",
+      "ms": 12.45,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=2, got=1",
+      "error": null
+    },
+    {
+      "name": "test_d_mix_9",
+      "cat": "D",
+      "sub": "mixed",
+      "ms": 67.56,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_mix_14",
+      "cat": "D",
+      "sub": "mixed",
+      "ms": 65.96,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=1, got=0",
+      "error": null
+    },
+    {
+      "name": "test_d_mix_15",
+      "cat": "D",
+      "sub": "mixed",
+      "ms": 11.83,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_mix_16",
+      "cat": "D",
+      "sub": "mixed",
+      "ms": 10.13,
+      "detail": "missing categories: {'address'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_let_9",
+      "cat": "D",
+      "sub": "letter",
+      "ms": 10.49,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_let_14",
+      "cat": "D",
+      "sub": "letter",
+      "ms": 62.68,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=2, got=1",
+      "error": null
+    },
+    {
+      "name": "test_d_let_21",
+      "cat": "D",
+      "sub": "letter",
+      "ms": 12.37,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_let_23",
+      "cat": "D",
+      "sub": "letter",
+      "ms": 12.83,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_let_25",
+      "cat": "D",
+      "sub": "letter",
+      "ms": 10.18,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=5, got=4",
+      "error": null
+    },
+    {
+      "name": "test_d_med_5",
+      "cat": "D",
+      "sub": "medical",
+      "ms": 11.08,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_med_9",
+      "cat": "D",
+      "sub": "medical",
+      "ms": 14.73,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_med_12",
+      "cat": "D",
+      "sub": "medical",
+      "ms": 59.6,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_med_16",
+      "cat": "D",
+      "sub": "medical",
+      "ms": 59.67,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_med_21",
+      "cat": "D",
+      "sub": "medical",
+      "ms": 16.61,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=2, got=1",
+      "error": null
+    },
+    {
+      "name": "test_d_med_25",
+      "cat": "D",
+      "sub": "medical",
+      "ms": 16.34,
+      "detail": "missing categories: {'issuing_authority'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_hr_5",
+      "cat": "D",
+      "sub": "hr",
+      "ms": 59.21,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_hr_10",
+      "cat": "D",
+      "sub": "hr",
+      "ms": 10.49,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_hr_14",
+      "cat": "D",
+      "sub": "hr",
+      "ms": 57.15,
+      "detail": "missing categories: {'issue_date'}; pd_count: expected>=4, got=3",
+      "error": null
+    },
+    {
+      "name": "test_d_hr_17",
+      "cat": "D",
+      "sub": "hr",
+      "ms": 11.49,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_fin_10",
+      "cat": "D",
+      "sub": "financial",
+      "ms": 54.7,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_fin_11",
+      "cat": "D",
+      "sub": "financial",
+      "ms": 11.52,
+      "detail": "missing categories: {'drivers_license'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_d_fin_22",
+      "cat": "D",
+      "sub": "financial",
+      "ms": 53.18,
+      "detail": "missing categories: {'oms'}",
+      "error": null
+    },
+    {
+      "name": "test_d_fin_24",
+      "cat": "D",
+      "sub": "financial",
+      "ms": 10.4,
+      "detail": "missing categories: {'cardholder_name'}; pd_count: expected>=3, got=2",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_1_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.13,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_2_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.8,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_3_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 3.13,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_4_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.82,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_5_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.55,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_6_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.02,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_7_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.62,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_8_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.87,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_9_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.96,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_10_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.14,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_11_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.17,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_12_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.27,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_13_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.77,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_14_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.92,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_15_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.1,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_16_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.88,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_17_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.95,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_18_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.24,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_19_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.01,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_20_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.97,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_21_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 0.64,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_22_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 0.94,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_23_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.65,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_24_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.42,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_25_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.1,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_26_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.42,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_27_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.22,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_28_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.3,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_29_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.1,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_30_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.64,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_31_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.16,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_32_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 0.89,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_33_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.95,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_34_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.68,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_35_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.98,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_36_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.59,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_37_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.34,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_38_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.44,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_39_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.99,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_40_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.3,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_41_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.67,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_42_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.6,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_43_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.07,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_44_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.73,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_45_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.97,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_46_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.82,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_47_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.33,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_48_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.64,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_49_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.7,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_50_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.92,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_51_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.23,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_52_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.99,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_53_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.06,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_54_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.43,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_55_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.22,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_56_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.04,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_57_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.08,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_58_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.39,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_59_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.38,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_60_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.76,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_61_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 0.76,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_62_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.98,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_63_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 2.15,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_64_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.86,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    },
+    {
+      "name": "test_e_idem_65_2nd",
+      "cat": "E",
+      "sub": "idempotency",
+      "ms": 1.89,
+      "detail": "action: expected=cached, got=masked",
+      "error": null
+    }
+  ]
+}

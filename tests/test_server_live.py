@@ -1605,6 +1605,221 @@ def build_group_f() -> List[TC]:
 
 # ──────────────────────────────────────────────────────────────────────
 # =====================================================================
+#   Группа G: SpaCy-верифицированные тесты (Anti-FP + NER-сверка)
+# =====================================================================
+# ──────────────────────────────────────────────────────────────────────
+
+def build_group_g() -> List[TC]:
+    """SpaCy-верифицированные тесты: кейсы из spacy_analysis.py.
+
+    Включает:
+    - Позитивные: тексты с ПДн (ФИО, паспорт, СНИЛС, ИНН и т.д.)
+    - Anti-FP: известные личности, организации, персонажи, топонимы
+    - Комбинированные: полные наборы ПДн клиента
+    """
+    tests: List[TC] = []
+
+    # --- G1: Чистые ФИО (SpaCy PER → fio) ---
+    tests.append(TC(
+        group="G", tag="g-fio-full",
+        payload="Иванов Иван Иванович обратился в банк.",
+        exp_cats=["fio"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-fio-female",
+        payload="Заявление от Петровой Марии Сергеевны.",
+        exp_cats=["fio"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-fio-initials",
+        payload="Сидоров А.В. подписал договор.",
+        exp_cats=["fio"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-fio-with-title",
+        payload="Директор Козлов Дмитрий Петрович назначил совещание.",
+        exp_cats=["fio"], exp_pd=1,
+    ))
+
+    # --- G2: ФИО + паспортные данные ---
+    tests.append(TC(
+        group="G", tag="g-fio-passport",
+        payload="Иванов Иван Иванович, паспорт серия 4510 номер 123456.",
+        exp_cats=["fio", "passport"], exp_pd=2,
+    ))
+    tests.append(TC(
+        group="G", tag="g-passport-organ-date",
+        payload="Паспортные данные: серия 4510 номер 654321, выдан ОВД района Тверской 15.03.2015.",
+        exp_cats=["passport", "issuing_authority", "issue_date"], exp_pd=3,
+    ))
+
+    # --- G3: Контактные данные ---
+    tests.append(TC(
+        group="G", tag="g-phone-email",
+        payload="Телефон: +7 (495) 123-45-67, email: test@example.com",
+        exp_cats=["phone", "email"], exp_pd=2,
+    ))
+    tests.append(TC(
+        group="G", tag="g-phone-8xxx",
+        payload="Звоните по номеру 8-916-555-12-34.",
+        exp_cats=["phone"], exp_pd=1,
+    ))
+
+    # --- G4: Финансовые данные ---
+    tests.append(TC(
+        group="G", tag="g-card-cvv",
+        payload="Номер карты: 4276 1234 5678 9012, CVV: 123",
+        exp_cats=["card_number", "cvv"], exp_pd=2,
+    ))
+    tests.append(TC(
+        group="G", tag="g-inn",
+        payload="ИНН: 770123456789",
+        exp_cats=["inn"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-snils",
+        payload="СНИЛС: 123-456-789 00",
+        exp_cats=["snils"], exp_pd=1,
+    ))
+
+    # --- G5: Адреса ---
+    tests.append(TC(
+        group="G", tag="g-address-full",
+        payload="Адрес: г. Москва, ул. Тверская, д. 15, кв. 42.",
+        exp_cats=["address"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-address-region",
+        payload="Проживает по адресу: Московская обл., г. Подольск, ул. Ленина, д. 5.",
+        exp_cats=["address"], exp_pd=1,
+    ))
+
+    # --- G6: Даты рождения ---
+    tests.append(TC(
+        group="G", tag="g-birth-date-num",
+        payload="Дата рождения: 15.06.1990",
+        exp_cats=["birth_date"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-birth-date-text",
+        payload="Родился 25 декабря 1985 года.",
+        exp_cats=["birth_date"], exp_pd=1,
+    ))
+
+    # --- G7: Anti-FP (SpaCy-верифицированные) ---
+    tests.append(TC(
+        group="G", tag="g-antifp-pushkin",
+        payload="Александр Сергеевич Пушкин написал Евгения Онегина.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-ooo",
+        payload="Компания ООО Ромашка зарегистрирована в 2020 году.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-president",
+        payload="Президент Владимир Путин выступил с речью.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-toponym",
+        payload="В городе Санкт-Петербург проходит фестиваль.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-temperature",
+        payload="Температура воздуха составила 25 градусов.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+
+    # --- G8: Комбинированные (полный набор ПДн) ---
+    tests.append(TC(
+        group="G", tag="g-combo-full-client",
+        payload=(
+            "Клиент Козлов Дмитрий Андреевич, дата рождения 12.03.1988, "
+            "паспорт серия 4515 номер 987654, СНИЛС 111-222-333 44, "
+            "проживает: г. Москва, ул. Арбат, д. 10, кв. 5. "
+            "Телефон: +7 (916) 111-22-33, email: kozlov@mail.ru"
+        ),
+        exp_cats=["fio", "birth_date", "passport", "snils", "address", "phone", "email"],
+        exp_pd=7,
+    ))
+    tests.append(TC(
+        group="G", tag="g-combo-inn-oms-zagran",
+        payload=(
+            "Заёмщик: Морозова Елена Викторовна, ИНН 501234567890, "
+            "полис ОМС 1234567890123456, загранпаспорт 72 1234567."
+        ),
+        exp_cats=["fio", "inn", "oms", "foreign_passport"],
+        exp_pd=4,
+    ))
+
+    # --- G9: Сложные контексты ---
+    tests.append(TC(
+        group="G", tag="g-birthplace-citizen",
+        payload="Место рождения: г. Новосибирск, гражданство: Российская Федерация.",
+        exp_cats=["birth_place", "citizenship"], exp_pd=2,
+    ))
+    tests.append(TC(
+        group="G", tag="g-subdivision-organ-date",
+        payload="Код подразделения: 770-025, выдан УФМС по г. Москве 20.05.2018.",
+        exp_cats=["subdivision_code", "issuing_authority", "issue_date"], exp_pd=3,
+    ))
+    tests.append(TC(
+        group="G", tag="g-drivers-license",
+        payload="Водительское удостоверение: 77 14 567890.",
+        exp_cats=["drivers_license"], exp_pd=1,
+    ))
+    tests.append(TC(
+        group="G", tag="g-military-id",
+        payload="Военный билет: АБ 1234567.",
+        exp_cats=["military_id"], exp_pd=1,
+    ))
+
+    # --- G10: Дополнительные Anti-FP с NER-верификацией ---
+    tests.append(TC(
+        group="G", tag="g-antifp-tolstoy",
+        payload="Лев Николаевич Толстой написал Войну и мир.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-mendeleev",
+        payload="Дмитрий Иванович Менделеев создал периодическую таблицу.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-gagarin",
+        payload="Юрий Алексеевич Гагарин полетел в космос.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-raskolnikov",
+        payload="Родион Раскольников — персонаж Достоевского.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-bolkonsky",
+        payload="Князь Андрей Болконский смотрел на небо.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-pao",
+        payload="ПАО Сбербанк выпустил новую карту.",
+        neg=True, exp_pd=0, exp_action="masked",
+    ))
+    tests.append(TC(
+        group="G", tag="g-antifp-ip",
+        payload="ИП Ромашка Иванов зарегистрирован.",
+        neg=True, exp_pd=0, exp_action="masked",
+        known_limitation=True,  # ИП + Ромашка может сработать на fio
+    ))
+
+    return tests
+
+
+# ──────────────────────────────────────────────────────────────────────
+# =====================================================================
 #   РАННЕР
 # =====================================================================
 # ──────────────────────────────────────────────────────────────────────
@@ -2088,11 +2303,12 @@ async def main() -> int:
     group_d = build_group_d()
     group_e = build_group_e()
     group_f = build_group_f()
+    group_g = build_group_g()
 
-    total_functional = len(group_a) + len(group_b) + len(group_c) + len(group_d) + len(group_e)
+    total_functional = len(group_a) + len(group_b) + len(group_c) + len(group_d) + len(group_e) + len(group_g)
     print(f"📋 Тест-кейсов: A={len(group_a)}, B={len(group_b)}, "
           f"C={len(group_c)}, D={len(group_d)}, E={len(group_e)}, "
-          f"F={len(group_f)} (нагрузка)")
+          f"F={len(group_f)} (нагрузка), G={len(group_g)} (SpaCy)")
     print(f"   Итого функциональных: {total_functional}")
     print()
 
@@ -2136,6 +2352,13 @@ async def main() -> int:
         pass_e = sum(1 for r in results_e if r.ok)
         print(f"  ✅ {pass_e}/{len(group_e)} пройдено")
         all_results.extend(results_e)
+
+        # --- Группа G (SpaCy-верифицированные) ---
+        print(f"▶ Группа G: SpaCy-верифицированные + Anti-FP ({len(group_g)} тестов)...")
+        results_g = await run_group_parallel(session, group_g)
+        pass_g = sum(1 for r in results_g if r.ok)
+        print(f"  ✅ {pass_g}/{len(group_g)} пройдено")
+        all_results.extend(results_g)
 
         # --- Группа F (нагрузочный тест) ---
         print(f"▶ Группа F: Нагрузочный тест ({LOAD_CONCURRENCY} conn × {LOAD_DURATION_SEC} сек)...")

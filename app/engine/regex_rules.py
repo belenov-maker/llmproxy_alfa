@@ -291,6 +291,7 @@ ALL_RULES.append(PDRule(
     description="Орган выдачи документа",
     priority=60,
     context_required=True,
+    use_group=1,
 ))
 
 # Орган выдачи — косвенная форма: «отделом УФМС», «отделением МВД»

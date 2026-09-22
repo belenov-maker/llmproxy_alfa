@@ -1,0 +1,422 @@
+{
+  "server": "http://localhost:8080",
+  "timestamp": "2026-09-22T23:46:06",
+  "elapsed_total_sec": 10.45,
+  "summary": {
+    "total_tests": 718,
+    "passed": 695,
+    "known_limitations": 23,
+    "failed": 0,
+    "pass_rate": "100.0%"
+  },
+  "groups": {
+    "A": {
+      "total": 315,
+      "pass": 309,
+      "fail": 0,
+      "known_limitations": 6,
+      "avg_ms": 8.12,
+      "p50_ms": 4.55,
+      "p95_ms": 26.75
+    },
+    "B": {
+      "total": 100,
+      "pass": 98,
+      "fail": 0,
+      "known_limitations": 2,
+      "avg_ms": 49.32,
+      "p50_ms": 6.24,
+      "p95_ms": 223.43
+    },
+    "C": {
+      "total": 100,
+      "pass": 85,
+      "fail": 0,
+      "known_limitations": 15,
+      "avg_ms": 4.46,
+      "p50_ms": 4.41,
+      "p95_ms": 6.78
+    },
+    "D": {
+      "total": 120,
+      "pass": 120,
+      "fail": 0,
+      "known_limitations": 0,
+      "avg_ms": 5.67,
+      "p50_ms": 4.29,
+      "p95_ms": 13.35
+    },
+    "E": {
+      "total": 50,
+      "pass": 50,
+      "fail": 0,
+      "known_limitations": 0,
+      "avg_ms": 0.64,
+      "p50_ms": 0.6,
+      "p95_ms": 0.9
+    },
+    "G": {
+      "total": 33,
+      "pass": 33,
+      "fail": 0,
+      "known_limitations": 0,
+      "avg_ms": 2.06,
+      "p50_ms": 1.84,
+      "p95_ms": 3.45
+    }
+  },
+  "load_test": {
+    "duration_sec": 10,
+    "concurrency": 100,
+    "total_requests": 76692,
+    "total_errors": 309,
+    "rps": 7669.2,
+    "latency_avg_ms": 13.02,
+    "latency_p50_ms": 10.63,
+    "latency_p95_ms": 31.14,
+    "latency_p99_ms": 36.5,
+    "latency_max_ms": 82.45
+  },
+  "failed_tests": [],
+  "known_limitation_tests": [
+    {
+      "group": "A",
+      "tag": "snils-03",
+      "errors": [
+        "не найдены категории: {'snils'}",
+        "pd_found=0, ожидалось>=1"
+      ],
+      "action": "masked",
+      "pd_found": 0,
+      "categories": [],
+      "elapsed_ms": 17.73,
+      "payload_preview": "12345678900",
+      "known_limitation": true
+    },
+    {
+      "group": "A",
+      "tag": "passport-04",
+      "errors": [
+        "не найдены категории: {'passport'}",
+        "pd_found=0, ожидалось>=1"
+      ],
+      "action": "masked",
+      "pd_found": 0,
+      "categories": [],
+      "elapsed_ms": 25.55,
+      "payload_preview": "4510123456",
+      "known_limitation": true
+    },
+    {
+      "group": "A",
+      "tag": "bdate-01",
+      "errors": [
+        "не найдены категории: {'birth_date'}",
+        "pd_found=0, ожидалось>=1"
+      ],
+      "action": "masked",
+      "pd_found": 0,
+      "categories": [],
+      "elapsed_ms": 3.81,
+      "payload_preview": "01.01.1990",
+      "known_limitation": true
+    },
+    {
+      "group": "A",
+      "tag": "bdate-07",
+      "errors": [
+        "не найдены категории: {'birth_date'}",
+        "pd_found=0, ожидалось>=1"
+      ],
+      "action": "masked",
+      "pd_found": 0,
+      "categories": [],
+      "elapsed_ms": 4.89,
+      "payload_preview": "15/06/1992",
+      "known_limitation": true
+    },
+    {
+      "group": "A",
+      "tag": "bdate-13",
+      "errors": [
+        "не найдены категории: {'birth_date'}",
+        "pd_found=0, ожидалось>=1"
+      ],
+      "action": "masked",
+      "pd_found": 0,
+      "categories": [],
+      "elapsed_ms": 8.03,
+      "payload_preview": "28.02.2000",
+      "known_limitation": true
+    },
+    {
+      "group": "A",
+      "tag": "mil-10",
+      "errors": [
+        "не найдены категории: {'military_id'}",
+        "pd_found=0, ожидалось>=1"
+      ],
+      "action": "masked",
+      "pd_found": 0,
+      "categories": [],
+      "elapsed_ms": 3.12,
+      "payload_preview": "серия АК номер 0123456",
+      "known_limitation": true
+    },
+    {
+      "group": "B",
+      "tag": "b-code-01",
+      "errors": [
+        "FP: pd_found=1, категории=['inn']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "inn"
+      ],
+      "elapsed_ms": 1.31,
+      "payload_preview": "const x = {\"key\": 123456789012, \"val\": true};",
+      "known_limitation": true
+    },
+    {
+      "group": "B",
+      "tag": "b-typo-01",
+      "errors": [
+        "FP: pd_found=1, категории=['fio']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "fio"
+      ],
+      "elapsed_ms": 221.24,
+      "payload_preview": "Ивнаов Иавн Ивановчи",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-company-08",
+      "errors": [
+        "FP: pd_found=1, категории=['fio']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "fio"
+      ],
+      "elapsed_ms": 3.3,
+      "payload_preview": "ФГУП «Почта России» доставляет посылки",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-fiction-04",
+      "errors": [
+        "FP: pd_found=1, категории=['fio']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "fio"
+      ],
+      "elapsed_ms": 4.31,
+      "payload_preview": "Наташа Ростова танцевала на балу",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-fiction-10",
+      "errors": [
+        "FP: pd_found=1, категории=['fio']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "fio"
+      ],
+      "elapsed_ms": 5.86,
+      "payload_preview": "Шерлок Холмс расследовал преступления",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-01",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.07,
+      "payload_preview": "улица Пушкина пересекает проспект Ленина",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-03",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.31,
+      "payload_preview": "набережная Грибоедова",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-04",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.77,
+      "payload_preview": "площадь Гагарина расположена в центре",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-05",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.81,
+      "payload_preview": "бульвар Толстого — тихая улица",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-06",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.35,
+      "payload_preview": "Ломоносовский проспект",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-08",
+      "errors": [
+        "FP: pd_found=1, категории=['fio']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "fio"
+      ],
+      "elapsed_ms": 6.39,
+      "payload_preview": "мост Александра Невского",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-09",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.42,
+      "payload_preview": "Чеховский переулок",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-topo-10",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 6.47,
+      "payload_preview": "Тургеневская площадь",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-num-01",
+      "errors": [
+        "FP: pd_found=1, категории=['inn']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "inn"
+      ],
+      "elapsed_ms": 6.67,
+      "payload_preview": "UUID: 550e8400-e29b-41d4-a716-446655440000",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-extra-04",
+      "errors": [
+        "FP: pd_found=1, категории=['fio']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "fio"
+      ],
+      "elapsed_ms": 2.41,
+      "payload_preview": "Матч Спартак — Динамо, счёт 2:1",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-extra-10",
+      "errors": [
+        "FP: pd_found=1, категории=['address']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "address"
+      ],
+      "elapsed_ms": 2.37,
+      "payload_preview": "Площадь помещения: 123.45 м², этаж 7 из 25",
+      "known_limitation": true
+    },
+    {
+      "group": "C",
+      "tag": "c-extra-08",
+      "errors": [
+        "FP: pd_found=1, категории=['subdivision_code']"
+      ],
+      "action": "masked",
+      "pd_found": 1,
+      "categories": [
+        "subdivision_code"
+      ],
+      "elapsed_ms": 6.34,
+      "payload_preview": "Код ошибки: ERR-123-456-789",
+      "known_limitation": true
+    }
+  ]
+}

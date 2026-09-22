@@ -1,0 +1,221 @@
+{
+  "summary": {
+    "total_samples": 26,
+    "samples_with_fn": 1,
+    "samples_with_fp": 3,
+    "avg_regex_ms": 0.12,
+    "avg_spacy_ms": 5.84
+  },
+  "metrics_by_category": {
+    "address": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "birth_date": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "birth_place": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "card_number": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "citizenship": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "cvv": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "drivers_license": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "email": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "fio": {
+      "tp": 7,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.7,
+      "recall": 1.0,
+      "f1": 0.8235
+    },
+    "foreign_passport": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "inn": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "issue_date": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "issuing_authority": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6667
+    },
+    "military_id": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "oms": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "passport": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "phone": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "snils": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "subdivision_code": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "false_negatives": [
+    {
+      "description": "Паспорт + орган выдачи + дата выдачи",
+      "text": "Паспортные данные: серия 4510 номер 654321, выдан ОВД района Тверской 15.03.2015.",
+      "missed_categories": [
+        "issuing_authority"
+      ]
+    }
+  ],
+  "false_positives": [
+    {
+      "description": "Anti-FP: известная личность",
+      "text": "Александр Сергеевич Пушкин написал Евгения Онегина.",
+      "extra_categories": [
+        "fio"
+      ],
+      "extra_matches": [
+        {
+          "category": "fio",
+          "value": "Александр Сергеевич Пушкин",
+          "confidence": 0.7
+        },
+        {
+          "category": "fio",
+          "value": "Евгения Онегина",
+          "confidence": 0.7
+        }
+      ]
+    },
+    {
+      "description": "Anti-FP: название организации",
+      "text": "Компания ООО Ромашка зарегистрирована в 2020 году.",
+      "extra_categories": [
+        "fio"
+      ],
+      "extra_matches": [
+        {
+          "category": "fio",
+          "value": "Компания ООО Ромашка",
+          "confidence": 0.7
+        }
+      ]
+    },
+    {
+      "description": "Anti-FP: публичная фигура",
+      "text": "Президент Владимир Путин выступил с речью.",
+      "extra_categories": [
+        "fio"
+      ],
+      "extra_matches": [
+        {
+          "category": "fio",
+          "value": "Президент Владимир Путин",
+          "confidence": 0.7
+        }
+      ]
+    }
+  ]
+}

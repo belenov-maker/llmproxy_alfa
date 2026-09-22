@@ -1,0 +1,89 @@
+================================================================================
+PD-PROXY INTEGRATION TEST REPORT
+Server: http://localhost:8080
+Date: 2026-09-22T18:57:19.572056
+Total time: 10.8s
+================================================================================
+
+Cat     Total    Pass    Fail     Rate
+----------------------------------------
+A         390     226     164    57.9%
+B         105      68      37    64.8%
+C         130       0     130     0.0%
+D         200     150      50    75.0%
+E         130      65      65    50.0%
+F         100     100       0   100.0%
+----------------------------------------
+ALL      1055     609     446    57.7%
+
+Latency (ms):
+  avg=21.4  p50=9.8  max=102.4
+
+Load test:
+  duration_s: 10
+  total_requests: 69261
+  errors: 168
+  rps: 6926.1
+  avg_ms: 14.44
+  p50_ms: 13.39
+  p95_ms: 21.64
+  p99_ms: 27.87
+  max_ms: 73.9
+  RPS >= 1000: PASS
+  p99 <= 1s:   PASS
+
+FAILED TESTS (446):
+--------------------------------------------------------------------------------
+  [A/passport] test_pass_word: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/passport] test_pass_sent: missing categories: {'passport'}
+  [A/passport] test_pass_3: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/passport] test_pass_lc: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/passport] test_pass_ml: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/passport] test_pass_dash: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/passport] test_pass_hash: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/passport] test_pass_comma: missing categories: {'passport'}; pd_count: expected>=1, got=0
+  [A/snils] test_snils_sp: missing categories: {'snils'}; pd_count: expected>=1, got=0
+  [A/inn] test_inn_ent2: missing categories: {'inn'}; pd_count: expected>=1, got=0
+  [A/inn] test_inn_kpp: missing categories: {'inn'}; pd_count: expected>=1, got=0
+  [A/inn] test_inn_ent3: missing categories: {'inn'}; pd_count: expected>=1, got=0
+  [A/inn] test_inn_hash: missing categories: {'inn'}; pd_count: expected>=1, got=0
+  [A/phone] test_ph_dot: missing categories: {'phone'}; pd_count: expected>=1, got=0
+  [A/card_number] test_card_amex: missing categories: {'card_number'}
+  [A/address] test_addr_pr: missing categories: {'address'}; pd_count: expected>=1, got=0
+  [A/address] test_addr_bul: missing categories: {'address'}; pd_count: expected>=1, got=0
+  [A/address] test_addr_der: missing categories: {'address'}; pd_count: expected>=1, got=0
+  [A/birth_date] test_bd_iso: missing categories: {'birth_date'}; pd_count: expected>=1, got=0
+  [A/birth_date] test_bd_mtxt: missing categories: {'birth_date'}; pd_count: expected>=1, got=0
+  [A/birth_date] test_bd_fio: missing categories: {'birth_date'}
+  [A/birth_date] test_bd_dec: missing categories: {'birth_date'}; pd_count: expected>=1, got=0
+  [A/oms] test_oms_sp: missing categories: {'oms'}; pd_count: expected>=1, got=0
+  [A/oms] test_oms_full: missing categories: {'oms'}
+  [A/oms] test_oms_sent: missing categories: {'oms'}
+  [A/oms] test_oms_lab: missing categories: {'oms'}
+  [A/oms] test_oms_name: missing categories: {'oms'}
+  [A/oms] test_oms_ml: missing categories: {'oms'}
+  [A/oms] test_oms_dash: missing categories: {'oms'}; pd_count: expected>=1, got=0
+  [A/oms] test_oms_paren: missing categories: {'oms'}
+  [A/drivers_license] test_dl_std: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_ctx: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_sent: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_short: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_2: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_3: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_ml: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_ctx2: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_lc: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_fio: missing categories: {'drivers_license'}
+  [A/drivers_license] test_dl_exp: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_cat: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_intl: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/drivers_license] test_dl_num: missing categories: {'drivers_license'}; pd_count: expected>=1, got=0
+  [A/foreign_passport] test_fp_ctx: missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0
+  [A/foreign_passport] test_fp_trv: missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0
+  [A/foreign_passport] test_fp_hash: missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0
+  [A/foreign_passport] test_fp_old: missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0
+  [A/foreign_passport] test_fp_child: missing categories: {'foreign_passport'}; pd_count: expected>=1, got=0
+  [A/military_id] test_mil_ctx: missing categories: {'military_id'}; pd_count: expected>=1, got=0
+  ... and 396 more
+
+================================================================================
