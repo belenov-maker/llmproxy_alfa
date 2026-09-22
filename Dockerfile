@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Код приложения
 COPY app/ app/
 COPY config/ config/
+COPY static/ static/
 COPY gunicorn.conf.py .
 
 # Каталог для кэша модели FastJev (volume mount)
