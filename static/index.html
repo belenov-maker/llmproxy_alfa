@@ -414,5 +414,157 @@
 
         checkHealth();
     </script>
+
+    <footer class="container" style="margin-top: 32px; padding-bottom: 40px;">
+        <details class="footer-info">
+            <summary>📜 Что такое персональные данные (152-ФЗ)</summary>
+            <div class="footer-content">
+                <p class="law-ref">Федеральный закон № 152-ФЗ «О персональных данных» от 27.07.2006</p>
+
+                <div class="law-quote">
+                    <strong>Статья 3.</strong> Персональные данные — любая информация, относящаяся к прямо или косвенно
+                    определённому или определяемому физическому лицу (субъекту персональных данных).
+                </div>
+
+                <h4>Категории ПДн, детектируемые PD-Proxy</h4>
+                <table class="pd-table">
+                    <thead><tr><th>Категория</th><th>Примеры</th><th>Основание</th></tr></thead>
+                    <tbody>
+                        <tr><td>ФИО</td><td>Иванов Иван Иванович</td><td>ст. 3 — идентификация лица</td></tr>
+                        <tr><td>Паспорт</td><td>4510 123456</td><td>ст. 3 — документ, удостоверяющий личность</td></tr>
+                        <tr><td>СНИЛС</td><td>123-456-789 00</td><td>ст. 3, Постановление Правительства РФ № 828</td></tr>
+                        <tr><td>ИНН</td><td>770312345678</td><td>ст. 3 — идентификатор налогоплательщика</td></tr>
+                        <tr><td>Телефон</td><td>+7(999)123-45-67</td><td>ст. 3 — контактная информация</td></tr>
+                        <tr><td>Email</td><td>ivan@mail.ru</td><td>ст. 3 — контактная информация</td></tr>
+                        <tr><td>Номер карты</td><td>4276 1234 5678 9010</td><td>ст. 3 — финансовые данные</td></tr>
+                        <tr><td>Адрес</td><td>г. Москва, ул. Ленина, д. 15</td><td>ст. 3 — место жительства</td></tr>
+                        <tr><td>Дата рождения</td><td>15.03.1985</td><td>ст. 3 — биографические данные</td></tr>
+                        <tr><td>Место рождения</td><td>г. Воронеж</td><td>ст. 3 — биографические данные</td></tr>
+                        <tr><td>Полис ОМС</td><td>1234567890123456</td><td>ст. 10 — сведения о здоровье</td></tr>
+                        <tr><td>Вод. удостоверение</td><td>77 14 567890</td><td>ст. 3 — документ, удостоверяющий личность</td></tr>
+                        <tr><td>Загранпаспорт</td><td>72 1234567</td><td>ст. 3 — документ, удостоверяющий личность</td></tr>
+                        <tr><td>Военный билет</td><td>АБ 1234567</td><td>ст. 3 — документ, удостоверяющий личность</td></tr>
+                        <tr><td>Гражданство</td><td>гражданин РФ</td><td>ст. 3 — биографические данные</td></tr>
+                        <tr><td>Держатель карты</td><td>IVAN IVANOV</td><td>ст. 3 — финансовые данные</td></tr>
+                        <tr><td>CVV / PIN</td><td>123 / 4567</td><td>ст. 3 — финансовые данные (контекстные)</td></tr>
+                        <tr><td>Дата выдачи</td><td>выдан 01.02.2020</td><td>ст. 3 — реквизиты документа</td></tr>
+                        <tr><td>Орган выдачи</td><td>ОВД района Хамовники</td><td>ст. 3 — реквизиты документа</td></tr>
+                        <tr><td>Код подразделения</td><td>770-120</td><td>ст. 3 — реквизиты документа</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Ключевые статьи 152-ФЗ</h4>
+                <ul class="law-list">
+                    <li><strong>Ст. 5</strong> — Принципы обработки: законность, соответствие целям, минимизация объёма, точность, ограничение срока хранения.</li>
+                    <li><strong>Ст. 6</strong> — Условия обработки: согласие субъекта, исполнение договора, законный интерес оператора.</li>
+                    <li><strong>Ст. 7</strong> — <em>Конфиденциальность</em>: операторы обязаны не раскрывать и не распространять ПДн без согласия субъекта.</li>
+                    <li><strong>Ст. 10</strong> — Специальные категории: расовая принадлежность, состояние здоровья, судимости — обработка по общему правилу запрещена.</li>
+                    <li><strong>Ст. 19</strong> — <em>Меры по обеспечению безопасности</em>: оператор обязан принимать технические и организационные меры для защиты ПДн.</li>
+                    <li><strong>Ст. 13.11 КоАП</strong> — Штрафы за нарушение: до 18 млн руб. для юридических лиц (с 01.09.2025).</li>
+                </ul>
+
+                <p class="law-note">PD-Proxy реализует требования ст. 19 (технические меры защиты) путём автоматической
+                детекции и маскирования ПДн перед передачей данных во внешние системы, включая LLM-сервисы.</p>
+            </div>
+        </details>
+    </footer>
+
+    <style>
+        .footer-info {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 16px 24px;
+        }
+        .footer-info summary {
+            cursor: pointer;
+            color: #8b949e;
+            font-size: 14px;
+            user-select: none;
+            transition: color 0.15s;
+        }
+        .footer-info summary:hover { color: #c9d1d9; }
+        .footer-info[open] summary { color: #58a6ff; margin-bottom: 16px; }
+
+        .footer-content { color: #c9d1d9; font-size: 14px; line-height: 1.7; }
+        .footer-content h4 {
+            color: #e1e4e8;
+            font-size: 14px;
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .law-ref {
+            color: #8b949e;
+            font-size: 12px;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+        .law-quote {
+            background: #0d1117;
+            border-left: 3px solid #58a6ff;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .pd-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .pd-table th {
+            text-align: left;
+            padding: 8px 10px;
+            background: #0d1117;
+            color: #8b949e;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #30363d;
+        }
+        .pd-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #21262d;
+            color: #c9d1d9;
+        }
+        .pd-table tr:hover td { background: rgba(88, 166, 255, 0.04); }
+        .pd-table td:first-child { color: #a5b4fc; font-weight: 600; white-space: nowrap; }
+        .pd-table td:nth-child(2) { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: #8b949e; }
+        .pd-table td:nth-child(3) { color: #8b949e; font-size: 12px; }
+
+        .law-list {
+            list-style: none;
+            padding: 0;
+        }
+        .law-list li {
+            padding: 6px 0 6px 16px;
+            position: relative;
+            color: #c9d1d9;
+            font-size: 13px;
+        }
+        .law-list li::before {
+            content: '\00A7';
+            position: absolute;
+            left: 0;
+            color: #58a6ff;
+            font-weight: 600;
+        }
+        .law-list li em { color: #fbbf24; font-style: normal; }
+
+        .law-note {
+            margin-top: 16px;
+            padding: 10px 14px;
+            background: rgba(35, 134, 54, 0.1);
+            border: 1px solid rgba(35, 134, 54, 0.2);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #7ee787;
+        }
+    </style>
 </body>
 </html>
