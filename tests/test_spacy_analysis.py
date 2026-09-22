@@ -64,7 +64,7 @@ class TestSpacyPositives:
         assert "phone" in cats
 
     def test_card_cvv(self):
-        matches = detect("Номер карты: 4276 1234 5678 9012, CVV: 123")
+        matches = detect("Номер карты: 4111 1111 1111 1111, CVV: 123")
         cats = {m.category for m in matches}
         assert "card_number" in cats
         assert "cvv" in cats

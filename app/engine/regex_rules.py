@@ -40,6 +40,8 @@ _MONTHS_RU = (
 _CYR_UP = r"[А-ЯЁ]"
 # Слово с заглавной кириллической (2+ букв, включая полностью заглавные: ИВАНОВ)
 _CYR_WORD_CAP = r"[А-ЯЁ][А-ЯЁа-яё]+"
+# Слово кириллицей (любой регистр, 2+ букв) — для lowercase ФИО
+_CYR_WORD_ANY = r"[А-ЯЁа-яё]{3,}"
 
 # Улицы / проспекты / переулки и т.д. — префиксы адреса
 _STREET_PREFIXES = (
@@ -121,6 +123,24 @@ ALL_RULES.append(PDRule(
     priority=40,
 ))
 
+# Lowercase ФИО с контекстом: «фио: иванов иван иванович»
+_FIO_LOWER_CTX = re.compile(
+    r"(?:фио|ф\.?и\.?о\.?|клиент|заёмщик|заемщик|владелец|получатель|абонент|пациент|заявитель)"
+    r"[\s:]+"
+    rf"({_CYR_WORD_ANY}(?:-{_CYR_WORD_ANY})?)"
+    rf"\s+"
+    rf"({_CYR_WORD_ANY})"
+    rf"(?:\s+({_CYR_WORD_ANY}))?",
+    re.IGNORECASE | re.UNICODE,
+)
+ALL_RULES.append(PDRule(
+    category="fio",
+    pattern=_FIO_LOWER_CTX,
+    description="ФИО в нижнем регистре (с контекстом)",
+    priority=75,
+    context_required=True,
+))
+
 # ===== 2. Дата рождения (birth_date) =======================================
 
 # С контекстом
@@ -177,6 +197,21 @@ ALL_RULES.append(PDRule(
     category="birth_date",
     pattern=_BIRTH_DATE_SUFFIX,
     description="Дата рождения (постфикс г.р.)",
+    priority=80,
+    context_required=True,
+))
+
+# ISO-формат даты рождения с контекстом: «дата рождения 1990.01.15», «born 1990-01-15»
+_BIRTH_DATE_ISO = re.compile(
+    r"(?:дата\s+рожд(?:ения|\.)?|д\.?\s?р\.?|родил(?:ся|ась)|рождён(?:а)?|born|ДР|р\.)"
+    r"[\s:]*"
+    r"(\d{4}[./-]\d{1,2}[./-]\d{1,2})",
+    re.IGNORECASE,
+)
+ALL_RULES.append(PDRule(
+    category="birth_date",
+    pattern=_BIRTH_DATE_ISO,
+    description="Дата рождения (ISO yyyy.mm.dd / yyyy-mm-dd с контекстом)",
     priority=80,
     context_required=True,
 ))

@@ -82,6 +82,26 @@ class TestFio:
         r = detect('ООО «Газпром»')
         assert not _has(r, "fio")
 
+    def test_lowercase_fio_with_context(self):
+        """ФИО в нижнем регистре с контекстом: фио иванов иван."""
+        r = detect("фио: иванов иван")
+        assert _has(r, "fio")
+
+    def test_lowercase_fio_full(self):
+        """ФИО в нижнем регистре с отчеством: клиент иванов иван иванович."""
+        r = detect("клиент иванов иван иванович")
+        assert _has(r, "fio")
+
+    def test_lowercase_fio_no_context(self):
+        """ФИО в нижнем регистре без контекста — не детектим."""
+        r = detect("иванов иван")
+        assert not _has(r, "fio")  # без контекста нельзя быть уверенным
+
+    def test_lowercase_fio_abonent(self):
+        """ФИО в нижнем регистре с контекстом «абонент»."""
+        r = detect("абонент петров пётр петрович")
+        assert _has(r, "fio")
+
 
 # =================== 2. Дата рождения (birth_date) =========================
 
@@ -115,6 +135,21 @@ class TestBirthDate:
         """Без контекста рождения — не birth_date."""
         r = detect("дата: 01.01.2024")
         assert not _has(r, "birth_date")
+
+    def test_date_iso_dot(self):
+        """Дата рождения ISO: 1990.01.15."""
+        r = detect("дата рождения 1990.01.15")
+        assert _has(r, "birth_date")
+
+    def test_date_iso_dash(self):
+        """Дата рождения ISO: 1990-01-15."""
+        r = detect("дата рождения 1990-01-15")
+        assert _has(r, "birth_date")
+
+    def test_date_iso_slash(self):
+        """Дата рождения ISO: born 1985/03/20."""
+        r = detect("born 1985/03/20")
+        assert _has(r, "birth_date")
 
 
 # ==================== 3. Место рождения (birth_place) =======================
@@ -320,6 +355,16 @@ class TestInn:
         r = detect("инн 770102345678")
         assert _has(r, "inn")
 
+    def test_inn_bare_invalid_checksum(self):
+        """Без контекста, невалидная контрольная сумма — не ИНН."""
+        r = detect("111111111111")  # 12 цифр, но не валидный ИНН
+        assert not _has(r, "inn")
+
+    def test_inn_ctx_always_detected(self):
+        """С контекстом ИНН — детектим даже с невалидной суммой."""
+        r = detect("ИНН 111111111111")
+        assert _has(r, "inn")  # с контекстом оставляем
+
 
 # =================== 14. Номер карты (card_number) ==========================
 
@@ -332,11 +377,10 @@ class TestCardNumber:
         assert match.confidence == 1.0
 
     def test_card_luhn_invalid(self):
-        """Карта 4111 1111 1111 1112 — Luhn невалидна → confidence=0.3."""
+        """Карта 4111 1111 1111 1112 — Luhn невалидна → отбрасываем."""
         r = detect("карта 4111 1111 1111 1112")
         match = _get(r, "card_number")
-        assert match is not None
-        assert match.confidence == 0.3
+        assert match is None  # non-Luhn карты теперь отсекаются
 
     def test_card_dashes(self):
         """Карта через дефисы: 5500-0000-0000-0004 (Luhn valid)."""
@@ -363,12 +407,12 @@ class TestCardNumber:
 class TestCvv:
     def test_cvv_with_card(self):
         """CVV с контекстом карты."""
-        r = detect("Карта 4276 1234 5678 9012, CVV: 123")
+        r = detect("Карта 4111 1111 1111 1111, CVV: 123")
         assert _has(r, "cvv")
 
     def test_cvc_with_card(self):
         """СVC с контекстом карты."""
-        r = detect("Карта 4276 1234 5678 9012, CVC 456")
+        r = detect("Карта 4111 1111 1111 1111, CVC 456")
         assert _has(r, "cvv")
 
     def test_cvv_without_card_not_detected(self):
@@ -382,12 +426,12 @@ class TestCvv:
 class TestPin:
     def test_pin_with_card(self):
         """ПИН с контекстом карты."""
-        r = detect("Карта 4276 1234 5678 9012, ПИН: 5678")
+        r = detect("Карта 4111 1111 1111 1111, ПИН: 5678")
         assert _has(r, "pin")
 
     def test_pin_en_with_card(self):
         """PIN с контекстом карты."""
-        r = detect("Карта 4276 1234 5678 9012, PIN 5678")
+        r = detect("Карта 4111 1111 1111 1111, PIN 5678")
         assert _has(r, "pin")
 
     def test_pin_without_card_not_detected(self):

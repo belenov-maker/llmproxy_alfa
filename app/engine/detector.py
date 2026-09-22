@@ -80,6 +80,26 @@ class PDMatch:
 # Luhn-алгоритм
 # ---------------------------------------------------------------------------
 
+def _inn_check(number: str) -> bool:
+    """Проверка контрольной суммы ИНН (ФНС России).
+
+    ИНН-12 (физлицо): проверка 11-й и 12-й цифры.
+    ИНН-10 (юрлицо): проверка 10-й цифры.
+    """
+    digits = [int(d) for d in number if d.isdigit()]
+    if len(digits) == 12:
+        w11 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8]
+        w12 = [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8]
+        c11 = sum(d * w for d, w in zip(digits, w11)) % 11 % 10
+        c12 = sum(d * w for d, w in zip(digits, w12)) % 11 % 10
+        return digits[10] == c11 and digits[11] == c12
+    elif len(digits) == 10:
+        w10 = [2, 4, 10, 3, 5, 9, 4, 6, 8]
+        c10 = sum(d * w for d, w in zip(digits, w10)) % 11 % 10
+        return digits[9] == c10
+    return False
+
+
 def _luhn_check(number: str) -> bool:
     """Проверка контрольной суммы Luhn для номера карты."""
     digits = [int(d) for d in number if d.isdigit()]
@@ -136,6 +156,15 @@ def detect(text: str) -> list[PDMatch]:
                 else:
                     confidence = 0.3
 
+            # Для ИНН — проверка контрольной суммы (повышает/понижает confidence)
+            if rule.category == "inn":
+                digits_only = "".join(c for c in value if c.isdigit())
+                if _inn_check(digits_only):
+                    confidence = min(confidence + 0.1, 1.0)
+                elif not rule.context_required:
+                    # Без контекста и без валидной контрольной суммы — отбрасываем
+                    continue
+
             raw_matches.append(PDMatch(
                 category=rule.category,
                 value=value,
@@ -144,6 +173,10 @@ def detect(text: str) -> list[PDMatch]:
                 confidence=confidence,
                 rule=rule.description,
             ))
+
+    # Фильтрация карт с низким confidence (non-Luhn)
+    raw_matches = [m for m in raw_matches
+                   if not (m.category == "card_number" and m.confidence < 0.5)]
 
     # Дедупликация перекрывающихся совпадений
     deduplicated = _deduplicate(raw_matches)

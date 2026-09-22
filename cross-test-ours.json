@@ -1,0 +1,295 @@
+{
+  "server": "http://localhost:8080",
+  "total": 35,
+  "passed": 32,
+  "failed": 0,
+  "known_limitations": 3,
+  "results": [
+    {
+      "id": "A-FN-1",
+      "desc": "ФИО 3 слова",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 21.724000107496977,
+      "known_limitation": false
+    },
+    {
+      "id": "A-FN-2",
+      "desc": "ФИО 2 слова",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 2.6240001898258924,
+      "known_limitation": false
+    },
+    {
+      "id": "A-FN-3",
+      "desc": "ФИО UPPER",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.9714580848813057,
+      "known_limitation": false
+    },
+    {
+      "id": "A-FN-4",
+      "desc": "ФИО lower (без контекста)",
+      "ok": false,
+      "errors": [
+        "Результат содержит 'иванов иван' (должен был замаскировать)"
+      ],
+      "elapsed_ms": 0.6964169442653656,
+      "known_limitation": true
+    },
+    {
+      "id": "A-CH-1",
+      "desc": "держатель карты",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.5249161515384912,
+      "known_limitation": false
+    },
+    {
+      "id": "A-BD-1",
+      "desc": "дата dd.mm.yyyy",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.409707823768258,
+      "known_limitation": false
+    },
+    {
+      "id": "A-BD-2",
+      "desc": "дата yyyy.mm.dd",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.457874896004796,
+      "known_limitation": false
+    },
+    {
+      "id": "A-BD-3",
+      "desc": "дата yyyy-mm-dd",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.3631668407469988,
+      "known_limitation": false
+    },
+    {
+      "id": "A-BD-4",
+      "desc": "дата текстом",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.312208827584982,
+      "known_limitation": false
+    },
+    {
+      "id": "A-BD-5",
+      "desc": "дата + года",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.2838749680668116,
+      "known_limitation": false
+    },
+    {
+      "id": "A-PP-1",
+      "desc": "паспорт словами",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.3253330253064632,
+      "known_limitation": false
+    },
+    {
+      "id": "A-PP-2",
+      "desc": "паспорт парой",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 2.2277079988271,
+      "known_limitation": false
+    },
+    {
+      "id": "A-DL-1",
+      "desc": "водительское",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.807791879400611,
+      "known_limitation": false
+    },
+    {
+      "id": "A-DL-2",
+      "desc": "в/у",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.7235418781638145,
+      "known_limitation": false
+    },
+    {
+      "id": "A-IN-1",
+      "desc": "ИНН 10",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.800999976694584,
+      "known_limitation": false
+    },
+    {
+      "id": "A-IN-2",
+      "desc": "ИНН 12",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.4345420058816671,
+      "known_limitation": false
+    },
+    {
+      "id": "A-CD-1",
+      "desc": "карта с пробелами",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.367208082228899,
+      "known_limitation": false
+    },
+    {
+      "id": "A-CD-2",
+      "desc": "карта сплошная",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.6284170560538769,
+      "known_limitation": false
+    },
+    {
+      "id": "A-CV-1",
+      "desc": "CVV (без карты)",
+      "ok": false,
+      "errors": [
+        "Результат содержит 'CVV: 123' (должен был замаскировать)"
+      ],
+      "elapsed_ms": 1.0175839997828007,
+      "known_limitation": true
+    },
+    {
+      "id": "A-PN-1",
+      "desc": "ПИН-код (без карты)",
+      "ok": false,
+      "errors": [
+        "Результат содержит 'ПИН-код: 1234' (должен был замаскировать)"
+      ],
+      "elapsed_ms": 0.6571670528501272,
+      "known_limitation": true
+    },
+    {
+      "id": "A-EM-1",
+      "desc": "email",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.6177080105990171,
+      "known_limitation": false
+    },
+    {
+      "id": "A-PH-1",
+      "desc": "телефон +7",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.3557500205934048,
+      "known_limitation": false
+    },
+    {
+      "id": "A-PH-2",
+      "desc": "телефон 8",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.5304998960345984,
+      "known_limitation": false
+    },
+    {
+      "id": "A-IX-1",
+      "desc": "почтовый индекс",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.6685421578586102,
+      "known_limitation": true
+    },
+    {
+      "id": "A-AD-1",
+      "desc": "адрес полный",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.9531671423465014,
+      "known_limitation": false
+    },
+    {
+      "id": "A-CT-1",
+      "desc": "гражданство",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 7.264540996402502,
+      "known_limitation": false
+    },
+    {
+      "id": "A-BP-1",
+      "desc": "место рождения",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.980082830414176,
+      "known_limitation": false
+    },
+    {
+      "id": "A-PI-1",
+      "desc": "орган выдачи",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 1.5577918384224176,
+      "known_limitation": false
+    },
+    {
+      "id": "A-NG-1",
+      "desc": "поэт Пушкин",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.7420829497277737,
+      "known_limitation": false
+    },
+    {
+      "id": "A-NG-2",
+      "desc": "адрес отделения банка",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.7071660365909338,
+      "known_limitation": true
+    },
+    {
+      "id": "A-NG-3",
+      "desc": "случайное число",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.5513748619705439,
+      "known_limitation": false
+    },
+    {
+      "id": "A-NG-4",
+      "desc": "не-Luhn карта",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.5597090348601341,
+      "known_limitation": false
+    },
+    {
+      "id": "A-NG-5",
+      "desc": "невалидная дата",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.7845000363886356,
+      "known_limitation": false
+    },
+    {
+      "id": "A-NG-6",
+      "desc": "телефон не-РФ",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.7471658755093813,
+      "known_limitation": false
+    },
+    {
+      "id": "A-NG-7",
+      "desc": "email без TLD",
+      "ok": true,
+      "errors": [],
+      "elapsed_ms": 0.7605829741805792,
+      "known_limitation": false
+    }
+  ]
+}
