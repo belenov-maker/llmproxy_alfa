@@ -36,6 +36,28 @@ echo "║       PD-Proxy — Автоматическое развёртыван
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
 
+# ─── Шаг 0: Очистка предыдущей (нативной) установки ─────────────────────────
+if systemctl is-active pd-proxy &>/dev/null 2>&1 || systemctl is-enabled pd-proxy &>/dev/null 2>&1; then
+    info "Шаг 0: Обнаружена предыдущая нативная установка — откатываю..."
+    systemctl stop pd-proxy 2>/dev/null || true
+    systemctl disable pd-proxy 2>/dev/null || true
+    rm -f /etc/systemd/system/pd-proxy.service
+    systemctl daemon-reload
+    ok "systemd-сервис pd-proxy остановлен и удалён"
+
+    if [[ -d "$APP_DIR/.venv" ]]; then
+        rm -rf "$APP_DIR/.venv"
+        ok "Виртуальное окружение .venv удалено"
+    fi
+
+    if id pdproxy &>/dev/null; then
+        userdel pdproxy 2>/dev/null || true
+        ok "Системный пользователь pdproxy удалён"
+    fi
+else
+    info "Шаг 0: Предыдущая нативная установка не обнаружена — пропускаю"
+fi
+
 # ─── Шаг 1: Установка Docker ────────────────────────────────────────────────
 info "Шаг 1/5: Проверка и установка Docker..."
 
