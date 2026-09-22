@@ -1,0 +1,41 @@
+services:
+  pd-proxy:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # Сервер
+      - PD_PROXY_WORKERS=4
+      - PD_PROXY_LOG_LEVEL=info
+      - PD_PROXY_AUTH_ENABLED=false
+      # FastJev (Эшелон 2 — локальный классификатор)
+      - PD_PROXY_JEV_ENABLED=true
+      - PD_PROXY_JEV_MODEL=Qwen/Qwen3-0.6B
+      # LLM-прокси (AlfaGen DeepSeek V4)
+      - PD_PROXY_LLM_BASE_URL=${PD_PROXY_LLM_BASE_URL:-}
+      - PD_PROXY_LLM_API_KEY=${PD_PROXY_LLM_API_KEY:-}
+      - PD_PROXY_LLM_MODEL=${PD_PROXY_LLM_MODEL:-deepseek-ai/DeepSeek-V4-Flash-0731}
+      # Хранилище
+      - PD_PROXY_STORAGE_TTL_SECONDS=3600
+      - PD_PROXY_STORAGE_MAX_SIZE=100000
+    volumes:
+      - ./config:/opt/pd-proxy/config:ro
+      - pd-proxy-models:/opt/pd-proxy/models
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 4G
+        reservations:
+          cpus: "2"
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  pd-proxy-models:
