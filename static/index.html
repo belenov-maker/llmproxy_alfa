@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PD-Proxy — Тестовая консоль</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e1e4e8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #58a6ff, #bc8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #8b949e; margin-bottom: 24px; font-size: 14px; }
+        
+        .panel {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .control-group { display: flex; flex-direction: column; gap: 4px; }
+        .control-group label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+        .control-group select, .control-group input {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e1e4e8;
+            padding: 8px 12px;
+            font-size: 14px;
+            outline: none;
+        }
+        .control-group select:focus, .control-group input:focus { border-color: #58a6ff; }
+        
+        textarea {
+            width: 100%;
+            min-height: 160px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #e1e4e8;
+            padding: 16px;
+            font-size: 15px;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+        }
+        textarea:focus { border-color: #58a6ff; }
+        textarea::placeholder { color: #484f58; }
+        
+        .btn-row { display: flex; gap: 12px; margin-top: 16px; }
+        
+        button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #238636, #2ea043);
+            color: #fff;
+        }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        
+        .btn-secondary {
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+        }
+        .btn-secondary:hover { background: #30363d; }
+
+        .result-panel { display: none; }
+        .result-panel.visible { display: block; }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .result-header h3 { font-size: 16px; }
+        
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-masked { background: #238636; color: #fff; }
+        .badge-cached { background: #1f6feb; color: #fff; }
+        .badge-unmasked { background: #a371f7; color: #fff; }
+        .badge-error { background: #da3633; color: #fff; }
+        
+        .result-text {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .stat-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .stat-value { font-size: 24px; font-weight: 700; color: #58a6ff; }
+        .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; text-transform: uppercase; }
+        
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .cat-tag {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: #a5b4fc;
+        }
+
+        .highlight {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 4px;
+            padding: 1px 4px;
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .examples { margin-top: 12px; }
+        .examples summary {
+            cursor: pointer;
+            color: #58a6ff;
+            font-size: 14px;
+            user-select: none;
+        }
+        .example-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+        .example-btn {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 10px 14px;
+            color: #c9d1d9;
+            cursor: pointer;
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.4;
+            transition: border-color 0.15s;
+        }
+        .example-btn:hover { border-color: #58a6ff; }
+        .example-btn .ex-title { color: #58a6ff; font-weight: 600; display: block; margin-bottom: 4px; font-size: 12px; }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #da3633;
+        }
+        .status-dot.online { background: #238636; }
+        .status-text { color: #8b949e; }
+
+        .spinner {
+            display: inline-block;
+            width: 16px; height: 16px;
+            border: 2px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ PD-Proxy</h1>
+        <p class="subtitle">Модуль безопасности персональных данных — тестовая консоль</p>
+
+        <div class="status-bar">
+            <div class="status-dot" id="statusDot"></div>
+            <span class="status-text" id="statusText">Проверяю подключение...</span>
+        </div>
+
+        <div class="panel">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Сервер</label>
+                    <input type="text" id="serverUrl" value="http://localhost:8080" style="width:240px" />
+                </div>
+                <div class="control-group">
+                    <label>Режим</label>
+                    <select id="mode">
+                        <option value="full">full (Regex + FastJev)</option>
+                        <option value="fast">fast (только Regex)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Payload ID</label>
+                    <input type="text" id="payloadId" placeholder="авто" style="width:180px" />
+                </div>
+            </div>
+
+            <textarea id="inputText" placeholder="Вставьте текст с персональными данными для проверки...&#10;&#10;Например: Иванов Иван Иванович, паспорт 4510 123456, телефон +7(999)123-45-67"></textarea>
+
+            <div class="btn-row">
+                <button class="btn-primary" id="btnProcess" onclick="processText()">
+                    🔍 Проверить
+                </button>
+                <button class="btn-secondary" onclick="clearAll()">Очистить</button>
+            </div>
+
+            <details class="examples">
+                <summary>📋 Примеры тестовых данных</summary>
+                <div class="example-list">
+                    <div class="example-btn" onclick="loadExample(0)">
+                        <span class="ex-title">Полный набор ПДн</span>
+                        Иванов Иван Иванович, паспорт 4510 123456, СНИЛС 123-456-789 00, ИНН 123456789012, тел. +7(999)123-45-67, email ivan@mail.ru, карта 4276 1234 5678 9010
+                    </div>
+                    <div class="example-btn" onclick="loadExample(1)">
+                        <span class="ex-title">Anti-FP тест (не должно маскировать)</span>
+                        Александр Сергеевич Пушкин написал Евгения Онегина в 1833 году. ООО Ромашка зарегистрировано в Москве. Позвоните по номеру 112.
+                    </div>
+                    <div class="example-btn" onclick="loadExample(2)">
+                        <span class="ex-title">Смешанный текст</span>
+                        Уважаемый Петров Сидор Алексеевич! Ваш заказ #12345 отправлен по адресу: г. Санкт-Петербург, ул. Невский проспект, д. 28. Контактный телефон: 89161234567, email: petrov@gmail.com. Оплата картой 5536 9137 1234 5678.
+                    </div>
+                    <div class="example-btn" onclick="loadExample(3)">
+                        <span class="ex-title">Медицинские/финансовые данные</span>
+                        Пациент Козлова Анна Петровна, полис ОМС 1234567890123456, СНИЛС 098-765-432 10, дата рождения 15.03.1985. Водительское удостоверение 77 14 567890.
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div class="panel result-panel" id="resultPanel">
+            <div class="result-header">
+                <h3>Результат</h3>
+                <span class="badge" id="actionBadge"></span>
+            </div>
+            <div class="result-text" id="resultText"></div>
+            <div class="stats-grid" id="statsGrid"></div>
+            <div class="categories" id="categoriesList"></div>
+        </div>
+    </div>
+
+    <script>
+        const examples = [
+            'Иванов Иван Иванович, паспорт 4510 123456, СНИЛС 123-456-789 00, ИНН 123456789012, тел. +7(999)123-45-67, email ivan@mail.ru, карта 4276 1234 5678 9010, адрес: г. Москва, ул. Ленина, д. 15, кв. 42',
+            'Александр Сергеевич Пушкин написал Евгения Онегина в 1833 году. ООО Ромашка зарегистрировано в Москве. Позвоните по номеру 112.',
+            'Уважаемый Петров Сидор Алексеевич! Ваш заказ #12345 отправлен по адресу: г. Санкт-Петербург, ул. Невский проспект, д. 28. Контактный телефон: 89161234567, email: petrov@gmail.com. Оплата картой 5536 9137 1234 5678.',
+            'Пациент Козлова Анна Петровна, полис ОМС 1234567890123456, СНИЛС 098-765-432 10, дата рождения 15.03.1985. Водительское удостоверение 77 14 567890.'
+        ];
+
+        const CATEGORY_LABELS = {
+            fio: 'ФИО', passport: 'Паспорт', snils: 'СНИЛС', inn: 'ИНН',
+            phone: 'Телефон', email: 'Email', card_number: 'Карта',
+            address: 'Адрес', birth_date: 'Дата рождения', birth_place: 'Место рождения',
+            oms: 'Полис ОМС', drivers_license: 'Вод. удостоверение',
+            foreign_passport: 'Загранпаспорт', military_id: 'Военный билет',
+            citizenship: 'Гражданство', cardholder_name: 'Держатель карты',
+            cvv: 'CVV', pin: 'PIN', issue_date: 'Дата выдачи',
+            issuing_authority: 'Орган выдачи', subdivision_code: 'Код подразделения'
+        };
+
+        function loadExample(idx) {
+            document.getElementById('inputText').value = examples[idx];
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('resultPanel').classList.remove('visible');
+            document.getElementById('payloadId').value = '';
+        }
+
+        async function checkHealth() {
+            const url = document.getElementById('serverUrl').value;
+            try {
+                const r = await fetch(`${url}/health`, { signal: AbortSignal.timeout(3000) });
+                const d = await r.json();
+                document.getElementById('statusDot').classList.add('online');
+                document.getElementById('statusText').textContent = `Подключено — ${url} (v${d.version})`;
+            } catch {
+                document.getElementById('statusDot').classList.remove('online');
+                document.getElementById('statusText').textContent = `Нет подключения к ${url}`;
+            }
+        }
+
+        function highlightPlaceholders(text) {
+            return text.replace(/\[([A-Z_]+_\d+)\]/g, '<span class="highlight">[$1]</span>');
+        }
+
+        async function processText() {
+            const text = document.getElementById('inputText').value.trim();
+            if (!text) return;
+
+            const url = document.getElementById('serverUrl').value;
+            const mode = document.getElementById('mode').value;
+            let payloadId = document.getElementById('payloadId').value.trim();
+            if (!payloadId) payloadId = `test-${Date.now()}`;
+
+            const btn = document.getElementById('btnProcess');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Обработка...';
+
+            try {
+                const r = await fetch(`${url}/process`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ payload: text, payload_id: payloadId, mode })
+                });
+                const d = await r.json();
+
+                const badge = document.getElementById('actionBadge');
+                const labels = { masked: 'Замаскировано', cached: 'Из кэша', unmasked: 'Демаскировано' };
+                badge.textContent = labels[d.action] || d.action;
+                badge.className = `badge badge-${d.action}`;
+
+                document.getElementById('resultText').innerHTML = highlightPlaceholders(d.result);
+
+                const grid = document.getElementById('statsGrid');
+                if (d.stats) {
+                    grid.innerHTML = `
+                        <div class="stat-card"><div class="stat-value">${d.stats.pd_found}</div><div class="stat-label">ПДн найдено</div></div>
+                        <div class="stat-card"><div class="stat-value">${d.stats.regex_ms}</div><div class="stat-label">Regex (мс)</div></div>
+                        <div class="stat-card"><div class="stat-value">${d.stats.jev_ms}</div><div class="stat-label">FastJev (мс)</div></div>
+                        <div class="stat-card"><div class="stat-value">${d.stats.total_ms}</div><div class="stat-label">Всего (мс)</div></div>
+                    `;
+                } else {
+                    grid.innerHTML = '';
+                }
+
+                const cats = document.getElementById('categoriesList');
+                if (d.stats && d.stats.categories.length) {
+                    cats.innerHTML = d.stats.categories
+                        .map(c => `<span class="cat-tag">${CATEGORY_LABELS[c] || c}</span>`)
+                        .join('');
+                } else {
+                    cats.innerHTML = '';
+                }
+
+                document.getElementById('resultPanel').classList.add('visible');
+
+            } catch (e) {
+                const badge = document.getElementById('actionBadge');
+                badge.textContent = 'Ошибка';
+                badge.className = 'badge badge-error';
+                document.getElementById('resultText').textContent = `Не удалось подключиться к серверу: ${e.message}\n\nУбедитесь, что PD-Proxy запущен на ${url}`;
+                document.getElementById('statsGrid').innerHTML = '';
+                document.getElementById('categoriesList').innerHTML = '';
+                document.getElementById('resultPanel').classList.add('visible');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🔍 Проверить';
+            }
+        }
+
+        document.getElementById('inputText').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) processText();
+        });
+
+        document.getElementById('serverUrl').addEventListener('change', checkHealth);
+
+        checkHealth();
+    </script>
+</body>
+</html>

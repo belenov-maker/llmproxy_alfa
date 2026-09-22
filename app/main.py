@@ -15,8 +15,11 @@ import logging
 import time
 from typing import Any
 
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings, load_systems_config
 from app.metrics import (
@@ -61,6 +64,11 @@ app.add_middleware(RateLimitMiddleware, rate=5000.0, burst=200)
 if settings.auth_enabled:
     from app.security.auth import APIKeyMiddleware
     app.add_middleware(APIKeyMiddleware)
+
+# Тестовая консоль (static/index.html)
+_static_dir = Path(__file__).resolve().parent.parent / "static"
+if _static_dir.is_dir():
+    app.mount("/ui", StaticFiles(directory=str(_static_dir), html=True), name="ui")
 
 # Глобальное хранилище маппингов
 storage = InMemoryStorage(
