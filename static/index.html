@@ -237,7 +237,7 @@
             <div class="controls">
                 <div class="control-group">
                     <label>Сервер</label>
-                    <input type="text" id="serverUrl" value="http://localhost:8080" style="width:240px" />
+                    <input type="text" id="serverUrl" style="width:240px" />
                 </div>
                 <div class="control-group">
                     <label>Режим</label>
@@ -338,7 +338,8 @@
         }
 
         function highlightPlaceholders(text) {
-            return text.replace(/\[([A-Z_]+_\d+)\]/g, '<span class="highlight">[$1]</span>');
+            if (!text) return '<span style="color:#8b949e">— пустой ответ —</span>';
+            return String(text).replace(/\[([A-Z_]+_\d+)\]/g, '<span class="highlight">[$1]</span>');
         }
 
         async function processText() {
@@ -358,9 +359,11 @@
                 const r = await fetch(`${url}/process`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ payload: text, payload_id: payloadId, mode })
+                    body: JSON.stringify({ payload: text, payload_id: payloadId, mode, system_id: 'default' })
                 });
+                if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
                 const d = await r.json();
+                if (!d || typeof d !== 'object') throw new Error('Некорректный ответ сервера');
 
                 const badge = document.getElementById('actionBadge');
                 const labels = { masked: 'Замаскировано', cached: 'Из кэша', unmasked: 'Демаскировано' };
@@ -409,6 +412,18 @@
         document.getElementById('inputText').addEventListener('keydown', e => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) processText();
         });
+
+        // Авто-определение URL сервера из адресной строки
+        (function() {
+            const input = document.getElementById('serverUrl');
+            const origin = window.location.origin;
+            // Если открыто через файл или localhost — оставляем localhost
+            if (origin && origin !== 'null' && !origin.includes('file://')) {
+                input.value = origin;
+            } else {
+                input.value = 'http://localhost:8080';
+            }
+        })();
 
         document.getElementById('serverUrl').addEventListener('change', checkHealth);
 

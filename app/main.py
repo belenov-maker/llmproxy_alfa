@@ -18,6 +18,7 @@ from typing import Any
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -54,6 +55,14 @@ app = FastAPI(
     title="PD-Proxy",
     description="Модуль безопасности персональных данных (regex + FastJev)",
     version=settings.version,
+)
+
+# CORS — разрешаем запросы с UI (может открываться по IP или localhost)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Rate limiting middleware
