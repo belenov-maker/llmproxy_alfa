@@ -1,0 +1,723 @@
+[
+  {
+    "id": "fn-01",
+    "text": "Клиент Иванов Иван Иванович",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 27,
+        "value": "Клиент Иванов Иван Иванович"
+      }
+    ]
+  },
+  {
+    "id": "fn-02",
+    "text": "Заявитель Петрова Мария Сергеевна",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 33,
+        "value": "Заявитель Петрова Мария Сергеевна"
+      }
+    ]
+  },
+  {
+    "id": "fn-03",
+    "text": "Сидоров А.В. подписал договор",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 12,
+        "value": "Сидоров А.В."
+      }
+    ]
+  },
+  {
+    "id": "fn-04",
+    "text": "Директор Козлов Дмитрий Петрович назначил совещание",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 23,
+        "value": "Директор Козлов Дмитрий"
+      }
+    ]
+  },
+  {
+    "id": "pp-01",
+    "text": "Паспорт серия 4510 номер 123456",
+    "negative": false,
+    "expected": [
+      {
+        "type": "passport",
+        "start": 0,
+        "end": 31,
+        "value": "Паспорт серия 4510 номер 123456"
+      }
+    ]
+  },
+  {
+    "id": "pp-02",
+    "text": "Документ 4510 654321 выдан",
+    "negative": false,
+    "expected": [
+      {
+        "type": "passport",
+        "start": 9,
+        "end": 20,
+        "value": "4510 654321"
+      }
+    ]
+  },
+  {
+    "id": "ph-01",
+    "text": "Телефон +7(999)123-45-67",
+    "negative": false,
+    "expected": [
+      {
+        "type": "phone",
+        "start": 8,
+        "end": 24,
+        "value": "+7(999)123-45-67"
+      }
+    ]
+  },
+  {
+    "id": "ph-02",
+    "text": "Мобильный: 89991234567",
+    "negative": false,
+    "expected": [
+      {
+        "type": "phone",
+        "start": 11,
+        "end": 22,
+        "value": "89991234567"
+      }
+    ]
+  },
+  {
+    "id": "em-01",
+    "text": "Email: user@mail.ru",
+    "negative": false,
+    "expected": [
+      {
+        "type": "email",
+        "start": 7,
+        "end": 19,
+        "value": "user@mail.ru"
+      }
+    ]
+  },
+  {
+    "id": "em-02",
+    "text": "Почта test.user@example.com для связи",
+    "negative": false,
+    "expected": [
+      {
+        "type": "email",
+        "start": 6,
+        "end": 27,
+        "value": "test.user@example.com"
+      }
+    ]
+  },
+  {
+    "id": "cd-01",
+    "text": "Карта 4111 1111 1111 1111",
+    "negative": false,
+    "expected": [
+      {
+        "type": "card_number",
+        "start": 6,
+        "end": 25,
+        "value": "4111 1111 1111 1111"
+      }
+    ]
+  },
+  {
+    "id": "cd-02",
+    "text": "Оплата картой 5500000000000004",
+    "negative": false,
+    "expected": [
+      {
+        "type": "card_number",
+        "start": 14,
+        "end": 30,
+        "value": "5500000000000004"
+      }
+    ]
+  },
+  {
+    "id": "in-01",
+    "text": "ИНН 770301234567",
+    "negative": false,
+    "expected": [
+      {
+        "type": "inn",
+        "start": 0,
+        "end": 16,
+        "value": "ИНН 770301234567"
+      }
+    ]
+  },
+  {
+    "id": "sn-01",
+    "text": "СНИЛС 234-567-890 12",
+    "negative": false,
+    "expected": [
+      {
+        "type": "snils",
+        "start": 6,
+        "end": 20,
+        "value": "234-567-890 12"
+      }
+    ]
+  },
+  {
+    "id": "ad-01",
+    "text": "Адрес: г. Москва, ул. Ленина, д. 10, кв. 25",
+    "negative": false,
+    "expected": [
+      {
+        "type": "address",
+        "start": 0,
+        "end": 43,
+        "value": "Адрес: г. Москва, ул. Ленина, д. 10, кв. 25"
+      }
+    ]
+  },
+  {
+    "id": "ad-02",
+    "text": "Проживает: Московская обл., г. Подольск, ул. Ленина, д. 5",
+    "negative": false,
+    "expected": [
+      {
+        "type": "address",
+        "start": 28,
+        "end": 57,
+        "value": "г. Подольск, ул. Ленина, д. 5"
+      }
+    ]
+  },
+  {
+    "id": "bd-01",
+    "text": "Дата рождения 01.01.1990",
+    "negative": false,
+    "expected": [
+      {
+        "type": "birth_date",
+        "start": 0,
+        "end": 24,
+        "value": "Дата рождения 01.01.1990"
+      }
+    ]
+  },
+  {
+    "id": "bd-02",
+    "text": "Родился 15 марта 1985 года",
+    "negative": false,
+    "expected": [
+      {
+        "type": "birth_date",
+        "start": 0,
+        "end": 23,
+        "value": "Родился 15 марта 1985 г"
+      }
+    ]
+  },
+  {
+    "id": "bp-01",
+    "text": "Место рождения: г. Новосибирск",
+    "negative": false,
+    "expected": [
+      {
+        "type": "birth_place",
+        "start": 0,
+        "end": 30,
+        "value": "Место рождения: г. Новосибирск"
+      }
+    ]
+  },
+  {
+    "id": "cz-01",
+    "text": "Гражданство: Российская Федерация",
+    "negative": false,
+    "expected": [
+      {
+        "type": "citizenship",
+        "start": 0,
+        "end": 33,
+        "value": "Гражданство: Российская Федерация"
+      }
+    ]
+  },
+  {
+    "id": "ia-01",
+    "text": "Выдан УФМС по г. Москве",
+    "negative": false,
+    "expected": [
+      {
+        "type": "issuing_authority",
+        "start": 6,
+        "end": 15,
+        "value": "УФМС по г"
+      }
+    ]
+  },
+  {
+    "id": "sc-01",
+    "text": "Код подразделения: 770-025",
+    "negative": false,
+    "expected": [
+      {
+        "type": "subdivision_code",
+        "start": 0,
+        "end": 26,
+        "value": "Код подразделения: 770-025"
+      }
+    ]
+  },
+  {
+    "id": "id-01",
+    "text": "Дата выдачи паспорта 15.03.2015",
+    "negative": false,
+    "expected": [
+      {
+        "type": "issue_date",
+        "start": 0,
+        "end": 31,
+        "value": "Дата выдачи паспорта 15.03.2015"
+      }
+    ]
+  },
+  {
+    "id": "dl-01",
+    "text": "Водительское удостоверение: 77 14 567890",
+    "negative": false,
+    "expected": [
+      {
+        "type": "drivers_license",
+        "start": 0,
+        "end": 40,
+        "value": "Водительское удостоверение: 77 14 567890"
+      }
+    ]
+  },
+  {
+    "id": "fp-01",
+    "text": "Загранпаспорт 72 1234567",
+    "negative": false,
+    "expected": [
+      {
+        "type": "foreign_passport",
+        "start": 0,
+        "end": 24,
+        "value": "Загранпаспорт 72 1234567"
+      }
+    ]
+  },
+  {
+    "id": "mi-01",
+    "text": "Военный билет: АБ 1234567",
+    "negative": false,
+    "expected": [
+      {
+        "type": "military_id",
+        "start": 0,
+        "end": 25,
+        "value": "Военный билет: АБ 1234567"
+      }
+    ]
+  },
+  {
+    "id": "om-01",
+    "text": "Полис ОМС 1234567890123456",
+    "negative": false,
+    "expected": [
+      {
+        "type": "oms",
+        "start": 0,
+        "end": 26,
+        "value": "Полис ОМС 1234567890123456"
+      }
+    ]
+  },
+  {
+    "id": "cv-01",
+    "text": "Карта 4111 1111 1111 1111, CVV 123",
+    "negative": false,
+    "expected": [
+      {
+        "type": "card_number",
+        "start": 6,
+        "end": 25,
+        "value": "4111 1111 1111 1111"
+      },
+      {
+        "type": "cvv",
+        "start": 27,
+        "end": 34,
+        "value": "CVV 123"
+      }
+    ]
+  },
+  {
+    "id": "combo-01",
+    "text": "Клиент Козлов Дмитрий Андреевич, дата рождения 12.03.1988, паспорт серия 4515 номер 654321",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 31,
+        "value": "Клиент Козлов Дмитрий Андреевич"
+      },
+      {
+        "type": "birth_date",
+        "start": 33,
+        "end": 57,
+        "value": "дата рождения 12.03.1988"
+      },
+      {
+        "type": "passport",
+        "start": 59,
+        "end": 90,
+        "value": "паспорт серия 4515 номер 654321"
+      }
+    ]
+  },
+  {
+    "id": "combo-02",
+    "text": "Контакт: Сидоров И.С., тел. +7(495)555-12-34, email: sidorov@corp.ru",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 9,
+        "end": 21,
+        "value": "Сидоров И.С."
+      },
+      {
+        "type": "phone",
+        "start": 28,
+        "end": 44,
+        "value": "+7(495)555-12-34"
+      },
+      {
+        "type": "email",
+        "start": 53,
+        "end": 68,
+        "value": "sidorov@corp.ru"
+      }
+    ]
+  },
+  {
+    "id": "combo-03",
+    "text": "ИНН 770301234567, полис ОМС 1234567890123456, загранпаспорт 72 1234567",
+    "negative": false,
+    "expected": [
+      {
+        "type": "inn",
+        "start": 0,
+        "end": 16,
+        "value": "ИНН 770301234567"
+      },
+      {
+        "type": "oms",
+        "start": 18,
+        "end": 44,
+        "value": "полис ОМС 1234567890123456"
+      },
+      {
+        "type": "foreign_passport",
+        "start": 46,
+        "end": 70,
+        "value": "загранпаспорт 72 1234567"
+      }
+    ]
+  },
+  {
+    "id": "ch-01",
+    "text": "Карта 4276000012345678, владелец IVANOV IVAN",
+    "negative": false,
+    "expected": [
+      {
+        "type": "cardholder_name",
+        "start": 33,
+        "end": 44,
+        "value": "IVANOV IVAN"
+      }
+    ]
+  },
+  {
+    "id": "full-01",
+    "text": "Козлов Дмитрий Андреевич, дата рождения 12.03.1988, паспорт серия 4515 номер 654321, выдан УФМС по г. Москве 20.05.2018, код подразделения 770-025, место рождения: г. Новосибирск, гражданство: Российская Федерация, адрес: г. Москва, ул. Ленина, д. 10, кв. 25, тел. +7(916)123-45-67, email: kozlov@mail.ru, СНИЛС 234-567-890 12",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 24,
+        "value": "Козлов Дмитрий Андреевич"
+      },
+      {
+        "type": "birth_date",
+        "start": 26,
+        "end": 50,
+        "value": "дата рождения 12.03.1988"
+      },
+      {
+        "type": "passport",
+        "start": 52,
+        "end": 83,
+        "value": "паспорт серия 4515 номер 654321"
+      },
+      {
+        "type": "issuing_authority",
+        "start": 91,
+        "end": 100,
+        "value": "УФМС по г"
+      },
+      {
+        "type": "issue_date",
+        "start": 109,
+        "end": 119,
+        "value": "20.05.2018"
+      },
+      {
+        "type": "subdivision_code",
+        "start": 121,
+        "end": 146,
+        "value": "код подразделения 770-025"
+      },
+      {
+        "type": "birth_place",
+        "start": 148,
+        "end": 178,
+        "value": "место рождения: г. Новосибирск"
+      },
+      {
+        "type": "citizenship",
+        "start": 180,
+        "end": 215,
+        "value": "гражданство: Российская Федерация, "
+      },
+      {
+        "type": "address",
+        "start": 215,
+        "end": 259,
+        "value": "адрес: г. Москва, ул. Ленина, д. 10, кв. 25,"
+      },
+      {
+        "type": "phone",
+        "start": 265,
+        "end": 281,
+        "value": "+7(916)123-45-67"
+      },
+      {
+        "type": "email",
+        "start": 290,
+        "end": 304,
+        "value": "kozlov@mail.ru"
+      },
+      {
+        "type": "snils",
+        "start": 312,
+        "end": 326,
+        "value": "234-567-890 12"
+      }
+    ]
+  },
+  {
+    "id": "ph-03",
+    "text": "Позвоните на номер 8 (495) 123-45-67",
+    "negative": false,
+    "expected": [
+      {
+        "type": "phone",
+        "start": 19,
+        "end": 36,
+        "value": "8 (495) 123-45-67"
+      }
+    ]
+  },
+  {
+    "id": "ph-04",
+    "text": "WhatsApp: +79161234567",
+    "negative": false,
+    "expected": [
+      {
+        "type": "phone",
+        "start": 10,
+        "end": 22,
+        "value": "+79161234567"
+      }
+    ]
+  },
+  {
+    "id": "em-03",
+    "text": "Пишите на support@company.co.uk",
+    "negative": false,
+    "expected": [
+      {
+        "type": "email",
+        "start": 10,
+        "end": 31,
+        "value": "support@company.co.uk"
+      }
+    ]
+  },
+  {
+    "id": "fn-05",
+    "text": "Ф.И.О.: Кузнецов Алексей Павлович",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 33,
+        "value": "Ф.И.О.: Кузнецов Алексей Павлович"
+      }
+    ]
+  },
+  {
+    "id": "fn-06",
+    "text": "Фамилия Новикова, имя Елена, отчество Викторовна",
+    "negative": false,
+    "expected": [
+      {
+        "type": "fio",
+        "start": 0,
+        "end": 16,
+        "value": "Фамилия Новикова"
+      }
+    ]
+  },
+  {
+    "id": "pp-03",
+    "text": "Паспорт: 45 10 № 987654",
+    "negative": false,
+    "expected": [
+      {
+        "type": "passport",
+        "start": 0,
+        "end": 23,
+        "value": "Паспорт: 45 10 № 987654"
+      }
+    ]
+  },
+  {
+    "id": "cd-03",
+    "text": "Visa: 4276-1234-5678-9010",
+    "negative": false,
+    "expected": []
+  },
+  {
+    "id": "ad-03",
+    "text": "Прописка: 109147, г. Москва, ул. Марксистская, д. 22, стр. 1",
+    "negative": false,
+    "expected": [
+      {
+        "type": "address",
+        "start": 10,
+        "end": 60,
+        "value": "109147, г. Москва, ул. Марксистская, д. 22, стр. 1"
+      }
+    ]
+  },
+  {
+    "id": "bd-03",
+    "text": "Дата рождения: 1990-01-15",
+    "negative": false,
+    "expected": [
+      {
+        "type": "birth_date",
+        "start": 0,
+        "end": 25,
+        "value": "Дата рождения: 1990-01-15"
+      }
+    ]
+  },
+  {
+    "id": "in-02",
+    "text": "ИНН организации: 7707083893",
+    "negative": false,
+    "expected": [
+      {
+        "type": "inn",
+        "start": 0,
+        "end": 27,
+        "value": "ИНН организации: 7707083893"
+      }
+    ]
+  },
+  {
+    "id": "sn-02",
+    "text": "СНИЛС: 123-456-789 64",
+    "negative": false,
+    "expected": [
+      {
+        "type": "snils",
+        "start": 7,
+        "end": 21,
+        "value": "123-456-789 64"
+      }
+    ]
+  },
+  {
+    "id": "neg-01",
+    "text": "Александр Сергеевич Пушкин написал Евгения Онегина",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-02",
+    "text": "ООО Ромашка зарегистрирована в 2020 году",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-03",
+    "text": "Президент Владимир Путин выступил с речью",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-04",
+    "text": "Температура воздуха +25 градусов",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-05",
+    "text": "В городе Санкт-Петербург проходит фестиваль",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-06",
+    "text": "Совещание запланировано на 15:30",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-07",
+    "text": "Бюджет проекта составляет 1 500 000 рублей",
+    "negative": true,
+    "expected": []
+  },
+  {
+    "id": "neg-08",
+    "text": "Артикул товара: ABC-12345-XYZ",
+    "negative": true,
+    "expected": []
+  }
+]

@@ -635,3 +635,116 @@ class TestDeduplication:
         assert match is not None
         # Должно быть правило с контекстом (priority=90)
         assert "контекст" in match.rule.lower() or match.confidence == 0.9
+
+
+
+# ==================== Issue A: Mixed-case FIO ================================
+
+class TestFIOMixedCase:
+    """Тесты для FIO смешанного регистра (lowercase имя + Capitalized фамилия)."""
+
+    def test_mixed_case_with_pd_context(self):
+        """'андрей Храпков' с PD-контекстом рядом → маскировать."""
+        r = detect("Мой телефон +79110004533, андрей Храпков")
+        assert _has(r, "fio"), "Не найдено ФИО 'андрей Храпков' с PD-контекстом"
+        fio = _get(r, "fio")
+        assert "андрей" in fio.value.lower()
+        assert "храпков" in fio.value.lower()
+
+    def test_mixed_case_without_context(self):
+        """'андрей Храпков' без контекста → НЕ маскировать (FP risk)."""
+        r = detect("Сегодня хорошая погода, андрей Храпков доволен")
+        assert not _has(r, "fio"), "FP: 'андрей Храпков' без контекста не должен маскироваться"
+
+    def test_mixed_case_with_zvat(self):
+        """'меня зовут андрей Храпков' → маскировать через ZVAT-контекст."""
+        r = detect("Меня зовут андрей Храпков")
+        assert _has(r, "fio")
+
+    def test_mixed_case_with_address_nearby(self):
+        """'андрей Храпков' рядом с адресом → маскировать (другая PD-категория)."""
+        r = detect("андрей Храпков живёт на ул. Ленина, д. 5, кв. 10")
+        assert _has(r, "fio")
+        assert _has(r, "address")
+
+    def test_mixed_case_with_personal_context(self):
+        """'андрей Храпков' со словом 'паспорт' рядом → маскировать."""
+        r = detect("паспорт андрей Храпков")
+        assert _has(r, "fio")
+
+
+# ==================== Issue B: Obfuscated Phone ==============================
+
+class TestPhoneObfuscated:
+    """Тесты для обфусцированных телефонов (цифры + слова-числительные)."""
+
+    def test_phone_with_word_digit(self):
+        """+7911000пять33 → маскировать."""
+        r = detect("+7911000пять33")
+        assert _has(r, "phone"), "Не найден обфусцированный телефон +7911000пять33"
+
+    def test_phone_two_word_digits(self):
+        """8девять111234три → маскировать."""
+        r = detect("8девять111234три")
+        assert _has(r, "phone"), "Не найден обфусцированный телефон 8девять111234три"
+
+    def test_phone_multiple_word_digits(self):
+        """+7один23четыре567890 → маскировать."""
+        r = detect("+7один23четыре567890")
+        assert _has(r, "phone")
+
+    def test_phone_too_short(self):
+        """+7пять → НЕ маскировать (слишком мало цифр)."""
+        r = detect("+7пять")
+        assert not _has(r, "phone"), "FP: +7пять — слишком мало цифр для телефона"
+
+    def test_normal_phone_still_works(self):
+        """Обычный телефон без обфускации → по-прежнему маскируется."""
+        r = detect("+79110004533")
+        assert _has(r, "phone")
+
+    def test_age_not_phone(self):
+        """'Ему восемь лет' → НЕ телефон."""
+        r = detect("Ему восемь лет")
+        assert not _has(r, "phone"), "FP: 'восемь' в обычном контексте не должно быть телефоном"
+
+
+# ==================== Issue C: Legal Entity Address ==========================
+
+class TestAddressLegalEntity:
+    """Тесты для фильтрации адресов юридических лиц."""
+
+    def test_ooo_address_not_masked(self):
+        """Адрес ООО → НЕ маскировать."""
+        r = detect("ООО Ромашка расположено по адресу ул. Ленина, д. 5")
+        assert not _has(r, "address"), "FP: адрес ООО не должен маскироваться"
+
+    def test_pao_address_not_masked(self):
+        """Адрес ПАО → НЕ маскировать."""
+        r = detect("ПАО Сбербанк, Невский проспект, д. 12")
+        assert not _has(r, "address"), "FP: адрес ПАО не должен маскироваться"
+
+    def test_zao_address_not_masked(self):
+        """Адрес ЗАО → НЕ маскировать."""
+        r = detect("ЗАО Стройсервис, ул. Пушкина, д. 15")
+        assert not _has(r, "address"), "FP: адрес ЗАО не должен маскироваться"
+
+    def test_company_address_not_masked(self):
+        """'офис компании на...' → НЕ маскировать."""
+        r = detect("офис компании на ул. Мира, д. 10")
+        assert not _has(r, "address")
+
+    def test_ip_address_masked(self):
+        """ИП — физлицо, адрес маскировать."""
+        r = detect("ИП Иванов зарегистрирован по адресу ул. Ленина, д. 5")
+        assert _has(r, "address"), "Адрес ИП (физлицо) должен маскироваться"
+
+    def test_personal_address_still_masked(self):
+        """Адрес физлица → маскировать."""
+        r = detect("Я живу на ул. Ленина, д. 5, кв. 10")
+        assert _has(r, "address"), "Адрес физлица должен маскироваться"
+
+    def test_library_address_not_masked(self):
+        """Адрес библиотеки → НЕ маскировать."""
+        r = detect("библиотека по адресу Московский проспект, д. 4")
+        assert not _has(r, "address")
