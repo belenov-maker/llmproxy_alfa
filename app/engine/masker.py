@@ -2,6 +2,11 @@
 
 Заменяет обнаруженные ПДн на плейсхолдеры вида [FIO_1], [PASSPORT_1], [PHONE_1].
 Возвращает маскированный текст и маппинг для демаскирования.
+
+Стили маскирования:
+- placeholder: [FIO_1], [PHONE_1] — полная замена
+- partial: И****в, +7 (916) ***-**-67 — частичное сокрытие
+- typed: [ФИО:И. И. И.], [ТЕЛ:+7 *** ***-**-67] — типизированное
 """
 
 from __future__ import annotations
@@ -37,6 +42,162 @@ _CATEGORY_PREFIX: dict[str, str] = {
     "military_id": "MILITARY_ID",
     "secret": "SECRET",
 }
+
+
+# --- Typed masking (типизированное: [ФИО:И. И. И.]) ---
+
+# Маппинг категории → русский лейбл для typed-стиля
+_CATEGORY_LABEL_RU: dict[str, str] = {
+    "fio": "ФИО",
+    "birth_date": "ДР",
+    "birth_place": "МЕСТО_РОЖД",
+    "passport": "ПАСПОРТ",
+    "citizenship": "ГРАЖДАНСТВО",
+    "issuing_authority": "ВЫДАН",
+    "subdivision_code": "КОД_ПОДР",
+    "issue_date": "ДАТА_ВЫДАЧИ",
+    "drivers_license": "ВУ",
+    "address": "АДРЕС",
+    "email": "EMAIL",
+    "phone": "ТЕЛ",
+    "inn": "ИНН",
+    "card_number": "КАРТА",
+    "cvv": "CVV",
+    "pin": "PIN",
+    "cardholder_name": "ВЛАДЕЛЕЦ",
+    "snils": "СНИЛС",
+    "oms": "ОМС",
+    "foreign_passport": "ЗАГРАН",
+    "military_id": "ВОЕН_БИЛЕТ",
+    "secret": "СЕКРЕТ",
+}
+
+
+def _typed_mask(value: str, category: str) -> str:
+    """Типизированное маскирование: сохраняет тип ПДн и частичное значение.
+
+    Результат оборачивается в [ЛЕЙБЛ:маска], например:
+        Иванов Иван Иванович → И. И. И.
+        +7 (916) 123-45-67 → +7 *** ***-**-67
+        test@example.com → t***@***.com
+        4510 123456 → 45** ****56
+        4111 1111 1111 1111 → 4111 11** **** 1111
+        770301234567 → 770*******67
+        01.01.1990 → **.**.**** 
+        123 → ***
+    """
+    if not value:
+        return value
+
+    # ФИО → инициалы (И. И. И.)
+    if category == "fio":
+        parts = value.split()
+        if len(parts) >= 2:
+            initials = ". ".join(p[0].upper() for p in parts if p) + "."
+            return initials
+        # Одно слово — первая буква + точка
+        return value[0].upper() + "."
+
+    # Телефон → скрыть середину, оставить код страны и последние 2
+    if category == "phone":
+        digits = [c for c in value if c.isdigit()]
+        if len(digits) >= 7:
+            masked_digits = digits[:2] + ["*"] * (len(digits) - 4) + digits[-2:]
+            result = list(value)
+            di = 0
+            for i, c in enumerate(result):
+                if c.isdigit():
+                    result[i] = masked_digits[di]
+                    di += 1
+            return "".join(result)
+
+    # Email → первый символ + *** + @*** + .домен
+    if category == "email":
+        parts = value.split("@")
+        if len(parts) == 2:
+            local = parts[0]
+            domain = parts[1]
+            domain_parts = domain.rsplit(".", 1)
+            if len(domain_parts) == 2:
+                return local[0] + "***@***." + domain_parts[1]
+            return local[0] + "***@***"
+
+    # Карта → первые 6 + **** + последние 4
+    if category == "card_number":
+        digits = [c for c in value if c.isdigit()]
+        if len(digits) >= 8:
+            masked_digits = digits[:6] + ["*"] * (len(digits) - 10) + digits[-4:]
+            # Если длина не 16 — более простая маска
+            if len(digits) < 10:
+                masked_digits = digits[:4] + ["*"] * (len(digits) - 8) + digits[-4:]
+            result = list(value)
+            di = 0
+            for i, c in enumerate(result):
+                if c.isdigit():
+                    if di < len(masked_digits):
+                        result[i] = masked_digits[di]
+                    di += 1
+            return "".join(result)
+
+    # Паспорт / загран / ВУ / военник → первые 2 цифры + ** + последние 2
+    if category in ("passport", "foreign_passport", "drivers_license", "military_id"):
+        alnums = [(i, c) for i, c in enumerate(value) if c.isdigit()]
+        if len(alnums) >= 4:
+            masked = list(value)
+            for idx, (pos, _) in enumerate(alnums):
+                if 2 <= idx < len(alnums) - 2:
+                    masked[pos] = "*"
+            return "".join(masked)
+
+    # ИНН / СНИЛС / ОМС / код подразделения → первые 3 + *** + последние 2
+    if category in ("inn", "snils", "oms", "subdivision_code"):
+        digits_pos = [(i, c) for i, c in enumerate(value) if c.isdigit()]
+        if len(digits_pos) >= 5:
+            masked = list(value)
+            for idx, (pos, _) in enumerate(digits_pos):
+                if 3 <= idx < len(digits_pos) - 2:
+                    masked[pos] = "*"
+            return "".join(masked)
+        # Короткий — маскируем середину
+        if len(digits_pos) >= 4:
+            masked = list(value)
+            for idx, (pos, _) in enumerate(digits_pos):
+                if 2 <= idx < len(digits_pos) - 2:
+                    masked[pos] = "*"
+            return "".join(masked)
+
+    # CVV / PIN → полная маска
+    if category in ("cvv", "pin"):
+        return "*" * len(value)
+
+    # Даты (birth_date, issue_date) → **.**.****
+    if category in ("birth_date", "issue_date"):
+        digits_pos = [(i, c) for i, c in enumerate(value) if c.isdigit()]
+        if digits_pos:
+            masked = list(value)
+            for pos, _ in digits_pos:
+                masked[pos] = "*"
+            return "".join(masked)
+
+    # Адрес → первые 10 символов + ...
+    if category == "address":
+        if len(value) > 15:
+            return value[:10] + "..."
+        return value[:3] + "***"
+
+    # Cardholder name → инициалы латиницей
+    if category == "cardholder_name":
+        parts = value.split()
+        if len(parts) >= 2:
+            return ". ".join(p[0].upper() for p in parts) + "."
+        return value[0].upper() + "."
+
+    # Все остальные (citizenship, issuing_authority, birth_place) → первые 3 + ...
+    if len(value) > 6:
+        return value[:3] + "..."
+    if len(value) <= 2:
+        return "*" * len(value)
+    return value[0] + "*" * (len(value) - 2) + value[-1]
 
 
 # --- Partial masking (частичное) ---
@@ -140,11 +301,12 @@ def mask_text(
     Стили:
         - placeholder (default): [FIO_1], [PHONE_1]
         - partial: И****в, +7 (916) ***-**-67
+        - typed: [ФИО:И. И. И.], [ТЕЛ:+7 *** ***-**-67]
 
     Args:
         text: Исходный текст.
         matches: Результаты detect().
-        style: 'placeholder' или 'partial'.
+        style: 'placeholder', 'partial' или 'typed'.
 
     Returns:
         MaskResult с маскированным текстом и маппингами.
@@ -164,6 +326,7 @@ def mask_text(
     reverse_map: dict[str, str] = {}
 
     use_partial = style == "partial"
+    use_typed = style == "typed"
 
     # Сортируем по позиции (от конца к началу) чтобы замены не сдвигали индексы
     sorted_matches = sorted(matches, key=lambda m: m.start, reverse=True)
@@ -175,7 +338,11 @@ def mask_text(
         if value in forward_map:
             replacement = forward_map[value]
         else:
-            if use_partial:
+            if use_typed:
+                label = _CATEGORY_LABEL_RU.get(match.category, match.category.upper())
+                masked_value = _typed_mask(value, match.category)
+                replacement = f"[{label}:{masked_value}]"
+            elif use_partial:
                 replacement = _partial_mask(value, match.category)
             else:
                 prefix = _CATEGORY_PREFIX.get(match.category, match.category.upper())

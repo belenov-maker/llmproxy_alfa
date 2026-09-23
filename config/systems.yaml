@@ -34,6 +34,34 @@ systems:
       - foreign_passport
       - military_id
 
+  typed:
+    description: "Типизированное маскирование [ФИО:И. И. И.]"
+    api_key: "pd-proxy-typed-key"
+    mode: full
+    masking_style: typed
+    pd_categories:
+      - fio
+      - birth_date
+      - birth_place
+      - passport
+      - citizenship
+      - issuing_authority
+      - subdivision_code
+      - issue_date
+      - drivers_license
+      - address
+      - email
+      - phone
+      - inn
+      - card_number
+      - cvv
+      - pin
+      - cardholder_name
+      - snils
+      - oms
+      - foreign_passport
+      - military_id
+
   load_test:
     description: "Профиль для нагрузочного тестирования (только regex)"
     api_key: "pd-proxy-load-test-key"

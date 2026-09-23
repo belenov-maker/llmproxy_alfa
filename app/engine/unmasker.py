@@ -11,9 +11,23 @@ from typing import Any
 # Паттерн для поиска плейсхолдеров вида [CATEGORY_N]
 _PLACEHOLDER_RE = re.compile(r"\[[A-Z_]+_\d+\]")
 
+# Паттерн для typed-масок вида [ФИО:И. И. И.] или [EMAIL:t***@***.com]
+_TYPED_RE = re.compile(r"\[[\wА-Яа-яЁё_]+:[^\]]+\]")
+
+# Объединённый паттерн: сначала typed (более сложный), потом placeholder
+_COMBINED_RE = re.compile(
+    r"\[[\wА-Яа-яЁё_]+:[^\]]+\]"
+    r"|"
+    r"\[[A-Z_]+_\d+\]"
+)
+
 
 def unmask_text(text: str, reverse_map: dict[str, str]) -> str:
     """Демаскировать текст, заменяя плейсхолдеры на оригинальные значения.
+
+    Поддерживает два формата:
+        - placeholder: [FIO_1], [PHONE_1]
+        - typed: [ФИО:И. И. И.], [ТЕЛ:+7 *** ***-**-67]
 
     Args:
         text: Маскированный текст.
@@ -29,7 +43,7 @@ def unmask_text(text: str, reverse_map: dict[str, str]) -> str:
         placeholder = m.group(0)
         return reverse_map.get(placeholder, placeholder)
 
-    return _PLACEHOLDER_RE.sub(_replace, text)
+    return _COMBINED_RE.sub(_replace, text)
 
 
 def unmask_payload(payload: Any, reverse_map: dict[str, str]) -> Any:
