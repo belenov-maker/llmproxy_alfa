@@ -215,6 +215,8 @@ class PDMatch:
     end: int           # Конечная позиция
     confidence: float  # Уверенность 0.0–1.0
     rule: str          # Описание правила
+    # --- debug-поля (не влияют на основную логику) ---
+    validation_note: str = ""  # luhn_pass / luhn_fail / inn_valid / …
 
 
 # ---------------------------------------------------------------------------
@@ -288,33 +290,36 @@ def detect(text: str) -> list[PDMatch]:
 
             # Базовый confidence
             confidence = 0.9 if rule.context_required else 0.7
+            v_note = ""  # validation note
 
             # Для карт — Luhn-валидация
             if rule.category == "card_number":
                 digits_only = value.replace(" ", "").replace("-", "")
                 if _luhn_check(digits_only):
                     confidence = 1.0
+                    v_note = "luhn_pass"
                 else:
                     confidence = 0.3
+                    v_note = "luhn_fail"
 
             # Для обфусцированного телефона — проверка кол-ва цифр (11 = код страны + 10 цифр)
             if rule.category == "phone" and "обфусцир" in rule.description:
                 digit_count = _count_phone_digits(value)
                 has_word_digit = bool(_DIGIT_WORD_RE.search(value))
-                # Обфусцированный телефон должен:
-                # 1) содержать хотя бы 1 слово-числительное
-                # 2) иметь не менее 9 "цифр" (с кодом страны; допускаем неполные)
                 if not has_word_digit or digit_count < 9 or digit_count > 15:
-                    continue  # Не похоже на обфусцированный телефон
+                    continue
+                v_note = f"obfuscated_phone_digits={digit_count}"
 
-            # Для ИНН — проверка контрольной суммы (повышает/понижает confidence)
+            # Для ИНН — проверка контрольной суммы
             if rule.category == "inn":
                 digits_only = "".join(c for c in value if c.isdigit())
                 if _inn_check(digits_only):
                     confidence = min(confidence + 0.1, 1.0)
+                    v_note = "inn_checksum_valid"
                 elif not rule.context_required:
-                    # Без контекста и без валидной контрольной суммы — отбрасываем
                     continue
+                else:
+                    v_note = "inn_checksum_invalid_but_context"
 
             raw_matches.append(PDMatch(
                 category=rule.category,
@@ -323,6 +328,7 @@ def detect(text: str) -> list[PDMatch]:
                 end=end,
                 confidence=confidence,
                 rule=rule.description,
+                validation_note=v_note,
             ))
 
     # Фильтрация карт с низким confidence (non-Luhn)
@@ -344,6 +350,129 @@ def detect(text: str) -> list[PDMatch]:
     # Сортировка по позиции
     deduplicated.sort(key=lambda m: (m.start, -m.end))
     return deduplicated
+
+
+@dataclass
+class DetectTrace:
+    """Трейс pipeline детекции для отладки."""
+
+    final_matches: list[PDMatch]
+    steps: list[dict]       # [{step, count_before, count_after, filtered, detail}]
+    rejected: list[PDMatch] # отклонённые матчи со всех этапов
+
+
+def detect_with_trace(text: str) -> DetectTrace:
+    """Обнаружить ПДн с полным debug-трейсом по каждому этапу pipeline."""
+    if not text or not text.strip():
+        return DetectTrace(final_matches=[], steps=[], rejected=[])
+
+    steps: list[dict] = []
+    all_rejected: list[PDMatch] = []
+
+    # --- Этап 1: Regex-сканирование ---
+    raw_matches: list[PDMatch] = []
+    for rule in ALL_RULES:
+        for m in rule.pattern.finditer(text):
+            g = rule.use_group if hasattr(rule, 'use_group') else 0
+            try:
+                value = m.group(g)
+                start = m.start(g)
+                end = m.end(g)
+            except IndexError:
+                value = m.group(0)
+                start = m.start()
+                end = m.end()
+
+            confidence = 0.9 if rule.context_required else 0.7
+            v_note = ""
+
+            if rule.category == "card_number":
+                digits_only = value.replace(" ", "").replace("-", "")
+                if _luhn_check(digits_only):
+                    confidence = 1.0
+                    v_note = "luhn_pass"
+                else:
+                    confidence = 0.3
+                    v_note = "luhn_fail"
+
+            if rule.category == "phone" and "обфусцир" in rule.description:
+                digit_count = _count_phone_digits(value)
+                has_word_digit = bool(_DIGIT_WORD_RE.search(value))
+                if not has_word_digit or digit_count < 9 or digit_count > 15:
+                    continue
+                v_note = f"obfuscated_phone_digits={digit_count}"
+
+            if rule.category == "inn":
+                digits_only = "".join(c for c in value if c.isdigit())
+                if _inn_check(digits_only):
+                    confidence = min(confidence + 0.1, 1.0)
+                    v_note = "inn_checksum_valid"
+                elif not rule.context_required:
+                    continue
+                else:
+                    v_note = "inn_checksum_invalid_but_context"
+
+            raw_matches.append(PDMatch(
+                category=rule.category, value=value,
+                start=start, end=end,
+                confidence=confidence, rule=rule.description,
+                validation_note=v_note,
+            ))
+
+    count_regex = len(raw_matches)
+    steps.append({"step": "1. Regex-сканирование", "count_before": 0, "count_after": count_regex, "filtered": 0, "detail": f"Применено {len(ALL_RULES)} правил"})
+
+    # --- Этап 2: Фильтрация карт (non-Luhn) ---
+    before = len(raw_matches)
+    luhn_rejected = [m for m in raw_matches if m.category == "card_number" and m.confidence < 0.5]
+    raw_matches = [m for m in raw_matches if not (m.category == "card_number" and m.confidence < 0.5)]
+    for r in luhn_rejected:
+        r.validation_note = "luhn_fail → отклонено"
+    all_rejected.extend(luhn_rejected)
+    steps.append({"step": "2. Luhn-фильтр карт", "count_before": before, "count_after": len(raw_matches), "filtered": len(luhn_rejected), "detail": "Карты с confidence < 0.5 (не прошли Luhn) удалены"})
+
+    # --- Этап 3: Дедупликация ---
+    before = len(raw_matches)
+    deduplicated = _deduplicate(raw_matches)
+    dedup_set = {(m.start, m.end, m.category) for m in deduplicated}
+    dedup_rejected = [m for m in raw_matches if (m.start, m.end, m.category) not in dedup_set]
+    for r in dedup_rejected:
+        r.validation_note = "перекрытие спанов → отклонено"
+    all_rejected.extend(dedup_rejected)
+    steps.append({"step": "3. Дедупликация", "count_before": before, "count_after": len(deduplicated), "filtered": before - len(deduplicated), "detail": "Перекрывающиеся спаны удалены"})
+
+    # --- Этап 4: Контекстная фильтрация ---
+    before = len(deduplicated)
+    filtered = _context_filter(deduplicated)
+    ctx_set = {(m.start, m.end, m.category) for m in filtered}
+    ctx_rejected = [m for m in deduplicated if (m.start, m.end, m.category) not in ctx_set]
+    for r in ctx_rejected:
+        r.validation_note = "нет карточного контекста → отклонено"
+    all_rejected.extend(ctx_rejected)
+    steps.append({"step": "4. Контекстный фильтр (PIN/CVV)", "count_before": before, "count_after": len(filtered), "filtered": before - len(filtered), "detail": "PIN/CVV без карточного контекста удалены"})
+
+    # --- Этап 5: Anti-FP ФИО ---
+    before = len(filtered)
+    after_fio = _fio_anti_fp(text, filtered)
+    fio_set = {(m.start, m.end, m.category) for m in after_fio}
+    fio_rejected = [m for m in filtered if (m.start, m.end, m.category) not in fio_set]
+    for r in fio_rejected:
+        r.validation_note = "anti-FP ФИО (стоп-слово/известная персона/организация) → отклонено"
+    all_rejected.extend(fio_rejected)
+    steps.append({"step": "5. Anti-FP ФИО", "count_before": before, "count_after": len(after_fio), "filtered": before - len(after_fio), "detail": "Известные персоны, организации, стоп-слова"})
+
+    # --- Этап 6: Anti-FP адреса ---
+    before = len(after_fio)
+    after_addr = _address_anti_fp(text, after_fio)
+    addr_set = {(m.start, m.end, m.category) for m in after_addr}
+    addr_rejected = [m for m in after_fio if (m.start, m.end, m.category) not in addr_set]
+    for r in addr_rejected:
+        r.validation_note = "anti-FP адрес (публичное место) → отклонено"
+    all_rejected.extend(addr_rejected)
+    steps.append({"step": "6. Anti-FP адреса", "count_before": before, "count_after": len(after_addr), "filtered": before - len(after_addr), "detail": "Адреса публичных мест удалены"})
+
+    after_addr.sort(key=lambda m: (m.start, -m.end))
+    return DetectTrace(final_matches=after_addr, steps=steps, rejected=all_rejected)
 
 
 _CONTEXT_WINDOW = 5  # ±5 слов вокруг спана (как у AlfaSonar)

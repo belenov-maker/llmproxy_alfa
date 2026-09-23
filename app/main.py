@@ -33,6 +33,9 @@ from app.metrics import (
 )
 from app.models import (
     AdminSystemConfig,
+    DebugMatchInfo,
+    DebugPipelineStep,
+    DebugTrace,
     HealthResponse,
     ProcessMode,
     ProcessRequest,
@@ -46,7 +49,7 @@ from app.models import (
 from app.storage.memory import InMemoryStorage, MaskingEntry
 import re as _re
 
-from app.engine.detector import detect
+from app.engine.detector import detect, detect_with_trace
 from app.engine.masker import mask_text
 from app.engine.unmasker import unmask_text
 from app.proxy.llm_proxy import proxy_to_llm
@@ -178,16 +181,23 @@ async def process(request: ProcessRequest) -> ProcessResponse:
 
     # Извлекаем текст для анализа
     text = _extract_text(request.payload)
+    want_debug = getattr(request, "debug", False)
 
     # ═══ Эшелон 1: Regex ═══
     regex_start = time.monotonic()
-    regex_matches = detect(text)
+    if want_debug:
+        trace = detect_with_trace(text)
+        regex_matches = trace.final_matches
+    else:
+        regex_matches = detect(text)
+        trace = None
     regex_ms = (time.monotonic() - regex_start) * 1000
 
     # ═══ Эшелон 2: FastJev (если mode=full) ═══
     jev_ms = 0.0
     final_matches = regex_matches
     regex_count = len(regex_matches)
+    jev_batch = None
 
     if mode == ProcessMode.FULL and regex_matches:
         jev_start = time.monotonic()
@@ -234,6 +244,22 @@ async def process(request: ProcessRequest) -> ProcessResponse:
         elapsed,
     )
 
+    # ═══ Сборка debug-трейса ═══
+    debug_trace = None
+    if want_debug:
+        debug_trace = _build_debug_trace(
+            text=text,
+            trace=trace,
+            final_matches=final_matches,
+            regex_matches=regex_matches,
+            jev_batch=jev_batch,
+            mask_result=mask_result,
+            mode=mode,
+            masking_style=masking_style,
+            system_id=system_id,
+            regex_count=regex_count,
+        )
+
     return ProcessResponse(
         result=mask_result.masked_text,
         payload_id=request.payload_id,
@@ -245,6 +271,139 @@ async def process(request: ProcessRequest) -> ProcessResponse:
             jev_ms=round(jev_ms, 2),
             total_ms=round(elapsed, 2),
         ),
+        debug_trace=debug_trace,
+    )
+
+
+def _build_debug_trace(
+    *,
+    text: str,
+    trace,
+    final_matches: list,
+    regex_matches: list,
+    jev_batch,
+    mask_result,
+    mode,
+    masking_style: str,
+    system_id: str,
+    regex_count: int,
+) -> DebugTrace:
+    """Build DebugTrace from pipeline data."""
+    from app.engine.detector import DetectTrace
+
+    # Pipeline steps
+    pipeline_steps = []
+    if trace and isinstance(trace, DetectTrace):
+        for s in trace.steps:
+            pipeline_steps.append(DebugPipelineStep(
+                step=s["step"],
+                count_before=s["count_before"],
+                count_after=s["count_after"],
+                filtered=s["filtered"],
+                detail=s.get("detail", ""),
+            ))
+
+    # Jev step (if applicable)
+    if jev_batch is not None:
+        jev_confirmed = len(final_matches)
+        jev_rejected_count = regex_count - jev_confirmed
+        pipeline_steps.append(DebugPipelineStep(
+            step="7. FastJev-верификация",
+            count_before=regex_count,
+            count_after=jev_confirmed,
+            filtered=jev_rejected_count,
+            detail=f"Пакетная проверка FastJev ({jev_batch.total_ms:.1f}ms)",
+        ))
+
+    # Build jev verdicts index by match position (jev uses m0, m1, m2...)
+    # regex_matches is the list that was passed to verify_matches
+    jev_by_match = {}  # (start, end, category) -> JevVerdict
+    if jev_batch is not None and hasattr(jev_batch, 'verdicts'):
+        for i, m in enumerate(regex_matches):
+            key = f"m{i}"
+            v = jev_batch.verdicts.get(key)
+            if v:
+                jev_by_match[(m.start, m.end, m.category)] = v
+
+    # Build match details
+    match_infos = []
+    for m in final_matches:
+        jev_verdict = "skipped"
+        jev_prob = None
+        jev_lat = None
+
+        v = jev_by_match.get((m.start, m.end, m.category))
+        if v:
+            jev_verdict = "confirmed" if v.is_pd else "rejected"
+            jev_prob = round(v.probability, 3)
+            jev_lat = round(v.latency_ms, 2)
+
+        if mode != ProcessMode.FULL:
+            jev_verdict = "skipped (fast mode)"
+
+        masked_as = mask_result.forward_map.get(m.value, "")
+
+        match_infos.append(DebugMatchInfo(
+            category=m.category,
+            value=m.value,
+            start=m.start,
+            end=m.end,
+            confidence=round(m.confidence, 3),
+            rule=m.rule,
+            masked_as=masked_as,
+            detector="regex",
+            jev_verdict=jev_verdict,
+            jev_probability=jev_prob,
+            jev_latency_ms=jev_lat,
+            validation=getattr(m, 'validation_note', ''),
+        ))
+
+    # Rejected matches (from regex pipeline)
+    rejected_infos = []
+    if trace and isinstance(trace, DetectTrace):
+        for r in trace.rejected:
+            rejected_infos.append(DebugMatchInfo(
+                category=r.category,
+                value=r.value,
+                start=r.start,
+                end=r.end,
+                confidence=round(r.confidence, 3),
+                rule=r.rule,
+                detector="regex",
+                jev_verdict="не дошло до Jev",
+                validation=getattr(r, 'validation_note', ''),
+            ))
+
+    # Jev-rejected matches
+    if jev_batch is not None and hasattr(jev_batch, 'verdicts'):
+        final_set = {(m.start, m.end, m.category) for m in final_matches}
+        for i, m in enumerate(regex_matches):
+            mkey = (m.start, m.end, m.category)
+            if mkey not in final_set:
+                v = jev_by_match.get(mkey)
+                if v and not v.is_pd:
+                    rejected_infos.append(DebugMatchInfo(
+                        category=m.category,
+                        value=m.value,
+                        start=m.start,
+                        end=m.end,
+                        confidence=round(m.confidence, 3),
+                        rule=m.rule,
+                        detector="regex",
+                        jev_verdict="rejected",
+                        jev_probability=round(v.probability, 3),
+                        jev_latency_ms=round(v.latency_ms, 2),
+                        validation="FastJev отклонил",
+                    ))
+
+    return DebugTrace(
+        mode=mode.value if hasattr(mode, 'value') else str(mode),
+        masking_style=masking_style,
+        system_id=system_id,
+        pipeline=pipeline_steps,
+        matches=match_infos,
+        rejected=rejected_infos,
+        input_length=len(text),
     )
 
 

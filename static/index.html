@@ -467,6 +467,38 @@
         }
         .toast.success { background: #238636; color: #fff; }
         .toast.error { background: #da3633; color: #fff; }
+
+        /* Debug panel */
+        .debug-toggle { display:inline-flex; align-items:center; gap:6px; margin-left:16px; cursor:pointer; color:#8b949e; font-size:13px; user-select:none; }
+        .debug-toggle input { accent-color:#f0883e; width:16px; height:16px; cursor:pointer; }
+        .debug-toggle:hover { color:#e1e4e8; }
+        .debug-panel { border: 1px solid #f0883e44; background: #161b2266; }
+        .debug-panel h3 { color:#f0883e; margin:0 0 16px 0; font-size:16px; }
+        .debug-section { margin-bottom:20px; }
+        .debug-section h4 { color:#e1e4e8; font-size:14px; margin:0 0 10px 0; border-bottom:1px solid #30363d; padding-bottom:6px; }
+        .debug-summary { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:8px; }
+        .debug-kv { background:#21262d; border-radius:6px; padding:8px 12px; }
+        .debug-kv .dk-label { color:#8b949e; font-size:11px; text-transform:uppercase; }
+        .debug-kv .dk-value { color:#e1e4e8; font-size:14px; font-weight:600; margin-top:2px; }
+        .debug-pipeline { width:100%; border-collapse:collapse; font-size:13px; }
+        .debug-pipeline th { text-align:left; color:#8b949e; font-weight:500; padding:6px 10px; border-bottom:1px solid #30363d; font-size:11px; text-transform:uppercase; }
+        .debug-pipeline td { padding:6px 10px; color:#e1e4e8; border-bottom:1px solid #21262d; }
+        .debug-pipeline tr:hover td { background:#21262d; }
+        .debug-pipeline .step-filtered { color:#da3633; font-weight:600; }
+        .debug-pipeline .step-ok { color:#238636; }
+        .debug-match-card { background:#21262d; border-radius:8px; padding:12px 16px; margin-bottom:8px; border-left:3px solid #238636; }
+        .debug-match-card.rejected { border-left-color:#da3633; }
+        .debug-match-card .dm-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+        .debug-match-card .dm-cat { background:#388bfd22; color:#58a6ff; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:600; }
+        .debug-match-card.rejected .dm-cat { background:#da363322; color:#f85149; }
+        .debug-match-card .dm-value { color:#f0883e; font-family:monospace; font-size:13px; }
+        .debug-match-card .dm-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:4px 16px; margin-top:8px; }
+        .debug-match-card .dm-field { font-size:12px; }
+        .debug-match-card .dm-field .f-label { color:#8b949e; }
+        .debug-match-card .dm-field .f-val { color:#c9d1d9; }
+        .dm-jev-confirmed { color:#238636; font-weight:600; }
+        .dm-jev-rejected { color:#da3633; font-weight:600; }
+        .dm-jev-skipped { color:#8b949e; }
     </style>
 </head>
 <body>
@@ -525,6 +557,10 @@
                     🔍 Проверить
                 </button>
                 <button class="btn-secondary" onclick="clearAll()">Очистить</button>
+                <label class="debug-toggle" title="Показать цепочку размышлений детектора">
+                    <input type="checkbox" id="debugMode" />
+                    <span>🔧 Отладка</span>
+                </label>
             </div>
 
             <details class="examples">
@@ -558,6 +594,31 @@
             <div class="result-text" id="resultText"></div>
             <div class="stats-grid" id="statsGrid"></div>
             <div class="categories" id="categoriesList"></div>
+        </div>
+
+        <!-- Debug-панель -->
+        <div id="debugPanel" class="panel debug-panel" style="display:none">
+            <h3>🔧 Цепочка размышлений детектора</h3>
+
+            <div class="debug-section">
+                <h4>🎯 Общая информация</h4>
+                <div id="debugSummary" class="debug-summary"></div>
+            </div>
+
+            <div class="debug-section">
+                <h4>⚙️ Pipeline (этапы обработки)</h4>
+                <div id="debugPipeline"></div>
+            </div>
+
+            <div class="debug-section">
+                <h4>✅ Принятые ПДн</h4>
+                <div id="debugMatches"></div>
+            </div>
+
+            <div class="debug-section">
+                <h4>❌ Отклонённые кандидаты</h4>
+                <div id="debugRejected"></div>
+            </div>
         </div>
 
         </div><!-- /tabConsole -->
@@ -624,6 +685,7 @@
         function clearAll() {
             document.getElementById('inputText').value = '';
             document.getElementById('resultPanel').classList.remove('visible');
+            document.getElementById('debugPanel').style.display = 'none';
             document.getElementById('payloadId').value = '';
         }
 
@@ -647,6 +709,59 @@
             return String(text).replace(/\[([A-Z_]+_\d+)\]/g, '<span class="highlight">[$1]</span>');
         }
 
+        function renderDebugTrace(data) {
+            const panel = document.getElementById('debugPanel');
+            if (!data.debug_trace) { panel.style.display = 'none'; return; }
+            const t = data.debug_trace;
+            panel.style.display = 'block';
+
+            // Summary
+            document.getElementById('debugSummary').innerHTML = [
+                ['Режим', t.mode], ['Стиль маскирования', t.masking_style],
+                ['Система', t.system_id], ['Длина текста', `${t.input_length} символов`],
+                ['Принято', t.matches.length], ['Отклонено', t.rejected.length]
+            ].map(([l,v]) => `<div class="debug-kv"><div class="dk-label">${l}</div><div class="dk-value">${v}</div></div>`).join('');
+
+            // Pipeline table
+            const pipeRows = t.pipeline.map(s => {
+                const cls = s.filtered > 0 ? 'step-filtered' : 'step-ok';
+                return `<tr><td>${esc(s.step)}</td><td>${s.count_before}</td><td>${s.count_after}</td><td class="${cls}">${s.filtered > 0 ? '−' + s.filtered : '—'}</td><td>${esc(s.detail)}</td></tr>`;
+            }).join('');
+            document.getElementById('debugPipeline').innerHTML = `<table class="debug-pipeline"><thead><tr><th>Шаг</th><th>Вход</th><th>Выход</th><th>Фильтр</th><th>Детали</th></tr></thead><tbody>${pipeRows}</tbody></table>`;
+
+            // Accepted matches
+            document.getElementById('debugMatches').innerHTML = t.matches.length
+                ? t.matches.map(renderMatchCard).join('')
+                : '<div style="color:#8b949e;font-size:13px">Нет принятых ПДн</div>';
+
+            // Rejected matches
+            document.getElementById('debugRejected').innerHTML = t.rejected.length
+                ? t.rejected.map(m => renderMatchCard(m, true)).join('')
+                : '<div style="color:#8b949e;font-size:13px">Нет отклонённых кандидатов</div>';
+        }
+
+        function renderMatchCard(m, rejected) {
+            const cls = rejected ? 'debug-match-card rejected' : 'debug-match-card';
+            const jevCls = m.jev_verdict === 'confirmed' ? 'dm-jev-confirmed'
+                : m.jev_verdict === 'rejected' ? 'dm-jev-rejected' : 'dm-jev-skipped';
+            const jevLabel = m.jev_verdict ? `<span class="${jevCls}">${m.jev_verdict}</span>` : '—';
+            const prob = m.jev_probability != null ? (m.jev_probability * 100).toFixed(1) + '%' : '—';
+            const fields = [
+                ['Позиция', `${m.start}–${m.end}`],
+                ['Правило', m.rule],
+                ['Детектор', m.detector],
+                ['Уверенность', (m.confidence * 100).toFixed(0) + '%'],
+                ['FastJev', jevLabel],
+                ['Jev prob', prob],
+            ];
+            if (m.validation) fields.push(['Валидация', m.validation]);
+            if (m.masked_as) fields.push(['Маска', `<code>${esc(m.masked_as)}</code>`]);
+            const grid = fields.map(([l,v]) => `<div class="dm-field"><span class="f-label">${l}: </span><span class="f-val">${v}</span></div>`).join('');
+            return `<div class="${cls}"><div class="dm-header"><span class="dm-cat">${CATEGORY_LABELS[m.category] || m.category}</span><span class="dm-value">${esc(m.value)}</span></div><div class="dm-grid">${grid}</div></div>`;
+        }
+
+        function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
         async function processText() {
             const text = document.getElementById('inputText').value.trim();
             if (!text) return;
@@ -664,7 +779,7 @@
                 const r = await fetch(`${url}/process`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ payload: text, payload_id: payloadId, mode, system_id: 'default' })
+                    body: JSON.stringify({ payload: text, payload_id: payloadId, mode, system_id: 'default', debug: document.getElementById('debugMode').checked })
                 });
                 if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
                 const d = await r.json();
@@ -700,6 +815,9 @@
 
                 document.getElementById('resultPanel').classList.add('visible');
 
+                // Debug trace
+                renderDebugTrace(d);
+
             } catch (e) {
                 const badge = document.getElementById('actionBadge');
                 badge.textContent = 'Ошибка';
@@ -707,6 +825,7 @@
                 document.getElementById('resultText').textContent = `Не удалось подключиться к серверу: ${e.message}\n\nУбедитесь, что PD-Proxy запущен на ${url}`;
                 document.getElementById('statsGrid').innerHTML = '';
                 document.getElementById('categoriesList').innerHTML = '';
+                document.getElementById('debugPanel').style.display = 'none';
                 document.getElementById('resultPanel').classList.add('visible');
             } finally {
                 btn.disabled = false;
