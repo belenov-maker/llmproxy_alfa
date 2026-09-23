@@ -6,4 +6,5 @@ pydantic-settings==2.9.1
 pyyaml==6.0.2
 httpx==0.28.1
 prometheus-client==0.22.1
+python-json-logger==3.2.1
 fastjev[llama-cpp]==0.1.1

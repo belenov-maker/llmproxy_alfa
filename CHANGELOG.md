@@ -5,6 +5,17 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
 проект придерживается [семантического версионирования](https://semver.org/lang/ru/).
 
+## [0.3.5] — 2026-09-23
+
+### Добавлено
+- Структурное JSON-логирование через `python-json-logger` — корректное экранирование спецсимволов вместо pseudo-JSON
+- Request-logging middleware: каждый HTTP-запрос логируется с method, path, status, latency, client_ip, user_agent
+- `X-Request-ID` header в каждом ответе (UUID4) для сквозной трассировки
+- Аудит-логи `/process`: маскирование/демаскирование/кэш логируются на уровне INFO с payload_id, system_id, pd_count, категориями и таймингами
+- Логирование rate limit (429) с IP-адресом и path
+- Опциональный файловый лог с ротацией: `PD_PROXY_LOG_FILE`, `PD_PROXY_LOG_FILE_MAX_MB`, `PD_PROXY_LOG_FILE_BACKUP_COUNT`
+- Тесты логирования: `tests/test_logging.py` (8 тестов)
+
 ## [0.3.4] — 2026-09-23
 
 ### Исправлено

@@ -23,6 +23,8 @@ from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings, load_systems_config, save_systems_config
+from app.context import request_id_var
+from app.logging_config import setup_logging
 from app.metrics import (
     REQUESTS_TOTAL,
     REQUEST_LATENCY,
@@ -71,6 +73,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Request logging middleware (request_id + structured access log)
+from app.middleware.request_logger import RequestLoggerMiddleware
+app.add_middleware(RequestLoggerMiddleware)
+
 # Rate limiting middleware
 from app.security.rate_limit import RateLimitMiddleware
 app.add_middleware(RateLimitMiddleware, rate=5000.0, burst=200)
@@ -91,10 +97,12 @@ storage = InMemoryStorage(
     max_size=settings.storage_max_size,
 )
 
-# Structured logging
-logging.basicConfig(
-    level=getattr(logging, settings.log_level.upper(), logging.INFO),
-    format='{"time":"%(asctime)s","level":"%(levelname)s","module":"%(name)s","msg":"%(message)s"}',
+# Structured JSON logging
+setup_logging(
+    level=settings.log_level,
+    log_file=settings.log_file,
+    log_file_max_mb=settings.log_file_max_mb,
+    log_file_backup_count=settings.log_file_backup_count,
 )
 
 
@@ -154,6 +162,13 @@ async def process(request: ProcessRequest) -> ProcessResponse:
         if existing.payload_hash == payload_hash:
             # Идемпотентный повтор — возвращаем кэшированный результат
             REQUESTS_TOTAL.labels(action="cached", system_id=system_id).inc()
+            logger.info(
+                "process: cached payload_id=%s system_id=%s",
+                request.payload_id,
+                system_id,
+                extra={"event": "pd_processed", "action": "cached",
+                       "payload_id": request.payload_id, "system_id": system_id},
+            )
             return ProcessResponse(
                 result=existing.masked_result or request.payload,
                 payload_id=request.payload_id,
@@ -166,6 +181,15 @@ async def process(request: ProcessRequest) -> ProcessResponse:
             elapsed = (time.monotonic() - start_time) * 1000
             REQUESTS_TOTAL.labels(action="unmasked", system_id=system_id).inc()
             REQUEST_LATENCY.labels(action="unmasked").observe(elapsed / 1000)
+            logger.info(
+                "process: unmasked payload_id=%s system_id=%s total=%.1fms",
+                request.payload_id,
+                system_id,
+                elapsed,
+                extra={"event": "pd_processed", "action": "unmasked",
+                       "payload_id": request.payload_id, "system_id": system_id,
+                       "total_ms": round(elapsed, 2)},
+            )
             return ProcessResponse(
                 result=unmasked,
                 payload_id=request.payload_id,
@@ -234,14 +258,27 @@ async def process(request: ProcessRequest) -> ProcessResponse:
     for cat in categories:
         PD_DETECTED.labels(category=cat).inc()
 
-    logger.debug(
-        "Обработан payload_id=%s: %d ПДн (%s), regex=%.1fms, jev=%.1fms, total=%.1fms",
+    logger.info(
+        "process: masked payload_id=%s system_id=%s pd=%d categories=[%s] "
+        "regex=%.1fms jev=%.1fms total=%.1fms",
         request.payload_id,
+        system_id,
         mask_result.pd_count,
         ",".join(categories),
         regex_ms,
         jev_ms,
         elapsed,
+        extra={
+            "event": "pd_processed",
+            "action": "masked",
+            "payload_id": request.payload_id,
+            "system_id": system_id,
+            "pd_count": mask_result.pd_count,
+            "categories": categories,
+            "regex_ms": round(regex_ms, 2),
+            "jev_ms": round(jev_ms, 2),
+            "total_ms": round(elapsed, 2),
+        },
     )
 
     # ═══ Сборка debug-трейса ═══

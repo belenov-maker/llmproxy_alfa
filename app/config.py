@@ -41,6 +41,11 @@ class Settings(BaseSettings):
     jev_max_input_tokens: int = 4096
     jev_confidence_threshold: float = 0.6
 
+    # Логирование
+    log_file: str = ""  # PD_PROXY_LOG_FILE — путь к файлу логов (пустой = только stdout)
+    log_file_max_mb: int = 50  # Размер ротации (МБ)
+    log_file_backup_count: int = 5  # Кол-во ротируемых файлов
+
     # Пути
     systems_config_path: str = "config/systems.yaml"
 

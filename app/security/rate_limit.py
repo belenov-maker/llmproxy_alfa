@@ -6,9 +6,12 @@
 
 from __future__ import annotations
 
+import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -80,6 +83,11 @@ class RateLimitMiddleware:
             return
 
         # 429 Too Many Requests
+        logger.warning(
+            "Rate limit exceeded: client_ip=%s path=%s",
+            client_ip,
+            path.decode("utf-8", errors="replace") if isinstance(path, bytes) else path,
+        )
         retry_after = str(max(1, int(1.0 / self.rate)))
         await send({
             "type": "http.response.start",
