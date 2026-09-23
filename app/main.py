@@ -19,7 +19,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings, load_systems_config
@@ -115,7 +115,7 @@ def _extract_text(payload: Any) -> str:
 @app.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     """Health-check endpoint."""
-    return HealthResponse()
+    return HealthResponse(version=settings.version)
 
 
 @app.get("/metrics")
@@ -321,3 +321,12 @@ async def admin_stats():
         "jev_model": settings.jev_model,
         "auth_enabled": settings.auth_enabled,
     }
+
+
+@app.get("/api/changelog")
+async def get_changelog():
+    """Отдать содержимое CHANGELOG.md для отображения в UI."""
+    changelog_path = Path(__file__).resolve().parent.parent / "CHANGELOG.md"
+    if not changelog_path.is_file():
+        return JSONResponse({"error": "CHANGELOG.md not found"}, status_code=404)
+    return PlainTextResponse(changelog_path.read_text(encoding="utf-8"))

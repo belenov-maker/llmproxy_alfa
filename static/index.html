@@ -210,6 +210,70 @@
         .status-dot.online { background: #238636; }
         .status-text { color: #8b949e; }
 
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .version-badge {
+            display: inline-block;
+            background: #238636;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 12px;
+            letter-spacing: 0.3px;
+        }
+        .changelog-link {
+            font-size: 12px;
+            color: #58a6ff;
+            text-decoration: none;
+            cursor: pointer;
+            border-bottom: 1px dashed #58a6ff;
+        }
+        .changelog-link:hover { color: #bc8cff; border-color: #bc8cff; }
+
+        .changelog-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .changelog-modal.open { display: flex; }
+        .changelog-content {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 720px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #e1e4e8;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .changelog-content h2 { color: #58a6ff; margin: 16px 0 8px; font-size: 18px; }
+        .changelog-content h3 { color: #bc8cff; margin: 12px 0 4px; font-size: 15px; }
+        .changelog-content ul { padding-left: 20px; margin: 4px 0; }
+        .changelog-content li { margin: 2px 0; }
+        .changelog-close {
+            float: right;
+            background: none;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            border-radius: 6px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .changelog-close:hover { border-color: #58a6ff; color: #58a6ff; }
+
         .spinner {
             display: inline-block;
             width: 16px; height: 16px;
@@ -225,8 +289,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>🛡️ PD-Proxy</h1>
+        <div class="header-row">
+            <h1>🛡️ PD-Proxy</h1>
+            <span class="version-badge" id="versionBadge">v...</span>
+            <a class="changelog-link">Changelog</a>
+        </div>
         <p class="subtitle">Модуль безопасности персональных данных — тестовая консоль</p>
+
+        <div class="changelog-modal" id="changelogModal" onclick="if(event.target===this)this.classList.remove('open')">
+            <div class="changelog-content" id="changelogContent">
+                <button class="changelog-close" onclick="document.getElementById('changelogModal').classList.remove('open')">✕ Закрыть</button>
+                <h2>📝 Загрузка...</h2>
+            </div>
+        </div>
 
         <div class="status-bar">
             <div class="status-dot" id="statusDot"></div>
@@ -331,9 +406,11 @@
                 const d = await r.json();
                 document.getElementById('statusDot').classList.add('online');
                 document.getElementById('statusText').textContent = `Подключено — ${url} (v${d.version})`;
+                document.getElementById('versionBadge').textContent = `v${d.version}`;
             } catch {
                 document.getElementById('statusDot').classList.remove('online');
                 document.getElementById('statusText').textContent = `Нет подключения к ${url}`;
+                document.getElementById('versionBadge').textContent = 'v?';
             }
         }
 
@@ -426,6 +503,45 @@
         })();
 
         document.getElementById('serverUrl').addEventListener('change', checkHealth);
+
+        // ═══ Changelog ═══
+        function mdToHtml(md) {
+            return md
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                .replace(/^- (.+)$/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+                .replace(/<\/ul>\s*<ul>/g, '')
+                .replace(/`([^`]+)`/g, '<code style="background:#0d1117;padding:1px 5px;border-radius:3px;font-size:13px">$1</code>')
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n{2,}/g, '<br><br>')
+                .replace(/(<\/h[123]>)(<br>)+/g, '$1')
+                .replace(/(<\/ul>)(<br>)+/g, '$1');
+        }
+
+        async function loadChangelog() {
+            const url = document.getElementById('serverUrl').value;
+            const el = document.getElementById('changelogContent');
+            try {
+                const r = await fetch(`${url}/api/changelog`, { signal: AbortSignal.timeout(5000) });
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                const md = await r.text();
+                el.innerHTML =
+                    '<button class="changelog-close" onclick="document.getElementById(\'changelogModal\').classList.remove(\'open\')">✕ Закрыть</button>'
+                    + mdToHtml(md);
+            } catch (e) {
+                el.innerHTML =
+                    '<button class="changelog-close" onclick="document.getElementById(\'changelogModal\').classList.remove(\'open\')">✕ Закрыть</button>'
+                    + '<h2>📝 Changelog</h2><p style="color:#da3633">Не удалось загрузить: ' + e.message + '</p>';
+            }
+        }
+
+        // Загружаем changelog при клике по ссылке
+        document.querySelector('.changelog-link').addEventListener('click', function() {
+            document.getElementById('changelogModal').classList.add('open');
+            loadChangelog();
+        });
 
         checkHealth();
     </script>

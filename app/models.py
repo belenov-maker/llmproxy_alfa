@@ -80,7 +80,7 @@ class HealthResponse(BaseModel):
     """Ответ health-check."""
 
     status: str = "ok"
-    version: str = "0.1.0"
+    version: str = ""
 
 
 class AdminSystemConfig(BaseModel):

@@ -9,12 +9,14 @@ import yaml
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
+from app import __version__
+
 
 class Settings(BaseSettings):
     """Настройки приложения из переменных окружения."""
 
     app_name: str = "pd-proxy"
-    version: str = "0.1.0"
+    version: str = __version__
     host: str = "0.0.0.0"
     port: int = 8080
     workers: int = 1
