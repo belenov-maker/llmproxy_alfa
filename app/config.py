@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     jev_max_input_tokens: int = 4096
     jev_confidence_threshold: float = 0.6
 
+    # NLP-обогащение (Natasha NER)
+    nlp_enabled: bool = True  # PD_PROXY_NLP_ENABLED — включить NLP-детекцию
+
     # Логирование
     log_file: str = ""  # PD_PROXY_LOG_FILE — путь к файлу логов (пустой = только stdout)
     log_file_max_mb: int = 50  # Размер ротации (МБ)

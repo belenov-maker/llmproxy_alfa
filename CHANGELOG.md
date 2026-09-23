@@ -5,6 +5,22 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
 проект придерживается [семантического версионирования](https://semver.org/lang/ru/).
 
+## [0.3.6] — 2026-09-23
+
+### Добавлено
+- NLP-обогащение детекции ПДн через Natasha NER (Эшелон 1.5)
+- PER-спаны (Natasha) дополняют regex-детекцию ФИО (confidence 0.75)
+- ORG-спаны отклоняют fio/address-матчи внутри организаций (anti-FP)
+- LOC-спаны с адресными маркерами создают address-матчи (confidence 0.65)
+- Настройка `PD_PROXY_NLP_ENABLED` для включения/отключения NLP (default: true)
+- Fail-open: при ошибке Natasha pipeline работает без NLP
+- Debug trace: NLP-этап показывает PER/LOC/ORG спаны и действия
+- 28 новых тестов NLP-детекции (`tests/test_nlp_detector.py`)
+
+### Производительность
+- Init Natasha: 528ms (однократно, лениво)
+- Per-request: +0.6ms median (итого ~1.6ms вместо ~1ms)
+
 ## [0.3.5] — 2026-09-23
 
 ### Добавлено

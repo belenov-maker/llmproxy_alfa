@@ -9,6 +9,7 @@ import re
 from dataclasses import dataclass
 
 from app.engine.regex_rules import ALL_RULES
+from app.config import settings
 
 # Маппинг слов-числительных → цифры (для валидации обфусцированных телефонов)
 _WORD_TO_DIGIT = {
@@ -341,6 +342,11 @@ def detect(text: str) -> list[PDMatch]:
     # Контекстная фильтрация
     deduplicated = _context_filter(deduplicated)
 
+    # NLP-обогащение (Natasha NER) — Эшелон 1.5
+    if settings.nlp_enabled:
+        from app.engine.nlp_detector import nlp_enrich
+        deduplicated, _ = nlp_enrich(text, deduplicated)
+
     # Anti-FP: фильтрация ФИО (известные личности, организации, персонажи)
     deduplicated = _fio_anti_fp(text, deduplicated)
 
@@ -451,7 +457,33 @@ def detect_with_trace(text: str) -> DetectTrace:
     all_rejected.extend(ctx_rejected)
     steps.append({"step": "4. Контекстный фильтр (PIN/CVV)", "count_before": before, "count_after": len(filtered), "filtered": before - len(filtered), "detail": "PIN/CVV без карточного контекста удалены"})
 
-    # --- Этап 5: Anti-FP ФИО ---
+    # --- Этап 5: NLP-обогащение (Natasha NER) ---
+    if settings.nlp_enabled:
+        from app.engine.nlp_detector import nlp_enrich
+        before = len(filtered)
+        after_nlp, nlp_detail = nlp_enrich(text, filtered)
+        # Новые матчи (PER/LOC) добавляются, ORG отклоняет
+        nlp_added = len(after_nlp) - before + nlp_detail.get("rejected_by_org", 0)
+        # Отклонённые ORG матчи
+        after_nlp_set = {(m.start, m.end, m.category) for m in after_nlp}
+        nlp_rejected = [m for m in filtered if (m.start, m.end, m.category) not in after_nlp_set]
+        for r in nlp_rejected:
+            r.validation_note = "NLP anti-FP: матч внутри ORG-спана → отклонено"
+        all_rejected.extend(nlp_rejected)
+        detail_str = (
+            f"PER={nlp_detail['ner_spans']['PER']}, "
+            f"LOC={nlp_detail['ner_spans']['LOC']}, "
+            f"ORG={nlp_detail['ner_spans']['ORG']}; "
+            f"+{nlp_detail['added_fio']} fio, "
+            f"+{nlp_detail['added_address']} address, "
+            f"-{nlp_detail['rejected_by_org']} org-anti-fp"
+        )
+        steps.append({"step": "5. NLP-обогащение (Natasha NER)", "count_before": before, "count_after": len(after_nlp), "filtered": nlp_detail.get("rejected_by_org", 0), "detail": detail_str})
+        filtered = after_nlp
+    else:
+        steps.append({"step": "5. NLP-обогащение (Natasha NER)", "count_before": len(filtered), "count_after": len(filtered), "filtered": 0, "detail": "NLP отключен (PD_PROXY_NLP_ENABLED=false)"})
+
+    # --- Этап 6: Anti-FP ФИО ---
     before = len(filtered)
     after_fio = _fio_anti_fp(text, filtered)
     fio_set = {(m.start, m.end, m.category) for m in after_fio}
@@ -459,9 +491,9 @@ def detect_with_trace(text: str) -> DetectTrace:
     for r in fio_rejected:
         r.validation_note = "anti-FP ФИО (стоп-слово/известная персона/организация) → отклонено"
     all_rejected.extend(fio_rejected)
-    steps.append({"step": "5. Anti-FP ФИО", "count_before": before, "count_after": len(after_fio), "filtered": before - len(after_fio), "detail": "Известные персоны, организации, стоп-слова"})
+    steps.append({"step": "6. Anti-FP ФИО", "count_before": before, "count_after": len(after_fio), "filtered": before - len(after_fio), "detail": "Известные персоны, организации, стоп-слова"})
 
-    # --- Этап 6: Anti-FP адреса ---
+    # --- Этап 7: Anti-FP адреса ---
     before = len(after_fio)
     after_addr = _address_anti_fp(text, after_fio)
     addr_set = {(m.start, m.end, m.category) for m in after_addr}
@@ -469,7 +501,7 @@ def detect_with_trace(text: str) -> DetectTrace:
     for r in addr_rejected:
         r.validation_note = "anti-FP адрес (публичное место) → отклонено"
     all_rejected.extend(addr_rejected)
-    steps.append({"step": "6. Anti-FP адреса", "count_before": before, "count_after": len(after_addr), "filtered": before - len(after_addr), "detail": "Адреса публичных мест удалены"})
+    steps.append({"step": "7. Anti-FP адреса", "count_before": before, "count_after": len(after_addr), "filtered": before - len(after_addr), "detail": "Адреса публичных мест удалены"})
 
     after_addr.sort(key=lambda m: (m.start, -m.end))
     return DetectTrace(final_matches=after_addr, steps=steps, rejected=all_rejected)
