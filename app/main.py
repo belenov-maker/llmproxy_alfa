@@ -22,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.config import settings, load_systems_config
+from app.config import settings, load_systems_config, save_systems_config
 from app.metrics import (
     REQUESTS_TOTAL,
     REQUEST_LATENCY,
@@ -38,11 +38,14 @@ from app.models import (
     ProcessRequest,
     ProcessResponse,
     ProcessStats,
+    SystemConfigUpdate,
     ProxyRequest,
     ProxyResponse,
     ProxyStats,
 )
 from app.storage.memory import InMemoryStorage, MaskingEntry
+import re as _re
+
 from app.engine.detector import detect
 from app.engine.masker import mask_text
 from app.engine.unmasker import unmask_text
@@ -321,6 +324,127 @@ async def admin_stats():
         "jev_model": settings.jev_model,
         "auth_enabled": settings.auth_enabled,
     }
+
+
+# ═══ Admin CRUD ═══
+
+# Допустимые стили маскирования
+_VALID_MASKING_STYLES = ["placeholder", "typed", "partial"]
+
+# Допустимые категории ПДн (из regex_rules)
+from app.engine.regex_rules import ALL_RULES as _ALL_RULES
+_VALID_PD_CATEGORIES = sorted(set(r.category for r in _ALL_RULES))
+
+# Русские лейблы категорий
+_CATEGORY_LABELS_RU = {
+    "fio": "ФИО", "phone": "Телефон", "email": "Email",
+    "passport": "Паспорт", "snils": "СНИЛС", "inn": "ИНН",
+    "card_number": "Номер карты", "cvv": "CVV", "pin": "PIN",
+    "cardholder_name": "Держатель карты", "address": "Адрес",
+    "birth_date": "Дата рождения", "birth_place": "Место рождения",
+    "oms": "Полис ОМС", "drivers_license": "Вод. удостоверение",
+    "foreign_passport": "Загранпаспорт", "military_id": "Военный билет",
+    "citizenship": "Гражданство", "issue_date": "Дата выдачи",
+    "issuing_authority": "Орган выдачи", "subdivision_code": "Код подразделения",
+}
+
+_SYSTEM_ID_RE = _re.compile(r'^[a-z0-9][a-z0-9_-]*$')
+
+
+@app.get("/admin/pd-categories")
+async def get_pd_categories():
+    """Список всех доступных категорий ПДн."""
+    return {
+        "categories": [
+            {"id": cat, "label": _CATEGORY_LABELS_RU.get(cat, cat)}
+            for cat in _VALID_PD_CATEGORIES
+        ]
+    }
+
+
+@app.get("/admin/masking-styles")
+async def get_masking_styles():
+    """Список доступных стилей маскирования."""
+    previews = {
+        "placeholder": "Иванов → [FIO_1]",
+        "typed": "Иванов → [ФИО:И. И. И.]",
+        "partial": "Иванов → И****в",
+    }
+    return {
+        "styles": [
+            {"id": s, "label": s, "preview": previews.get(s, "")}
+            for s in _VALID_MASKING_STYLES
+        ]
+    }
+
+
+@app.put("/admin/systems/{system_id}")
+async def upsert_system(system_id: str, body: SystemConfigUpdate):
+    """Создать или обновить конфигурацию системы."""
+    # Валидация system_id
+    if not _SYSTEM_ID_RE.match(system_id):
+        return JSONResponse(
+            {"error": "system_id должен содержать только a-z, 0-9, _ и -"},
+            status_code=400,
+        )
+    # Валидация masking_style
+    if body.masking_style not in _VALID_MASKING_STYLES:
+        return JSONResponse(
+            {"error": f"Недопустимый masking_style: {body.masking_style}. Допустимые: {_VALID_MASKING_STYLES}"},
+            status_code=400,
+        )
+    # Валидация pd_categories
+    invalid_cats = [c for c in body.pd_categories if c not in _VALID_PD_CATEGORIES]
+    if invalid_cats:
+        return JSONResponse(
+            {"error": f"Неизвестные категории: {invalid_cats}"},
+            status_code=400,
+        )
+    # Загружаем текущий конфиг
+    config = load_systems_config()
+    systems = config.setdefault("systems", {})
+    # Сохраняем api_key если система уже существует, иначе генерируем новый
+    existing_key = ""
+    if system_id in systems and isinstance(systems[system_id], dict):
+        existing_key = systems[system_id].get("api_key", "")
+    if not existing_key:
+        existing_key = f"pd-proxy-{system_id}-key"
+    # Обновляем
+    systems[system_id] = {
+        "description": body.description,
+        "api_key": existing_key,
+        "mode": body.mode.value,
+        "masking_style": body.masking_style,
+        "pd_categories": body.pd_categories,
+        "allow_demasking": body.allow_demasking,
+    }
+    save_systems_config(config)
+    logger.info("Система '%s' обновлена через admin API", system_id)
+    return {"ok": True, "system_id": system_id}
+
+
+@app.delete("/admin/systems/{system_id}")
+async def delete_system(system_id: str):
+    """Удалить систему."""
+    if system_id == "default":
+        return JSONResponse(
+            {"error": "Систему 'default' нельзя удалить"},
+            status_code=400,
+        )
+    config = load_systems_config()
+    systems = config.get("systems", {})
+    if system_id not in systems:
+        return JSONResponse(
+            {"error": f"Система '{system_id}' не найдена"},
+            status_code=404,
+        )
+    del systems[system_id]
+    save_systems_config(config)
+    logger.info("Система '%s' удалена через admin API", system_id)
+    return {"ok": True, "deleted": system_id}
+
+
+# ═══ API ═══
 
 
 @app.get("/api/changelog")

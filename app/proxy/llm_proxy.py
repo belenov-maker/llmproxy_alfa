@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
-from app.config import settings
+from app.config import settings, load_systems_config
 from app.engine.detector import detect
 from app.engine.masker import mask_text, MaskResult
 from app.engine.unmasker import unmask_text
@@ -142,7 +142,10 @@ async def proxy_to_llm(
         jev_ms = batch.total_ms if batch.total_ms > 0 else (time.perf_counter() - t1) * 1000
 
     # ═══ Маскирование ═══
-    mask_result = mask_text(text, final_matches)
+    systems_config = load_systems_config()
+    system_cfg = systems_config.get("systems", {}).get(system_id, {})
+    masking_style = system_cfg.get("masking_style", "placeholder")
+    mask_result = mask_text(text, final_matches, style=masking_style)
     categories = list(set(m.category for m in final_matches))
 
     logger.info(

@@ -1,85 +1,71 @@
-# Конфигурация систем-потребителей PD-Proxy
-# Каждая система может настроить свой набор категорий ПДн и режим работы
-
-# Если auth_enabled=false (по умолчанию) — API-key не проверяется.
-# Включить: PD_PROXY_AUTH_ENABLED=true
 auth_enabled: false
-
 systems:
   default:
-    description: "Настройки по умолчанию"
-    api_key: "pd-proxy-default-key"
-    mode: full           # full (regex + FastJev) | fast (только regex)
-    masking_style: placeholder  # placeholder | synthetic | hash
+    description: Настройки по умолчанию
+    api_key: pd-proxy-default-key
+    mode: full
+    masking_style: placeholder
     pd_categories:
-      - fio
-      - birth_date
-      - birth_place
-      - passport
-      - citizenship
-      - issuing_authority
-      - subdivision_code
-      - issue_date
-      - drivers_license
-      - address
-      - email
-      - phone
-      - inn
-      - card_number
-      - cvv
-      - pin
-      - cardholder_name
-      - snils
-      - oms
-      - foreign_passport
-      - military_id
-
+    - fio
+    - birth_date
+    - birth_place
+    - passport
+    - citizenship
+    - issuing_authority
+    - subdivision_code
+    - issue_date
+    - drivers_license
+    - address
+    - email
+    - phone
+    - inn
+    - card_number
+    - cvv
+    - pin
+    - cardholder_name
+    - snils
+    - oms
+    - foreign_passport
+    - military_id
+    allow_demasking: false
   typed:
-    description: "Типизированное маскирование [ФИО:И. И. И.]"
-    api_key: "pd-proxy-typed-key"
+    description: Типизированное маскирование [ФИО:И. И. И.]
+    api_key: pd-proxy-typed-key
     mode: full
     masking_style: typed
     pd_categories:
-      - fio
-      - birth_date
-      - birth_place
-      - passport
-      - citizenship
-      - issuing_authority
-      - subdivision_code
-      - issue_date
-      - drivers_license
-      - address
-      - email
-      - phone
-      - inn
-      - card_number
-      - cvv
-      - pin
-      - cardholder_name
-      - snils
-      - oms
-      - foreign_passport
-      - military_id
-
+    - fio
+    - birth_date
+    - birth_place
+    - passport
+    - citizenship
+    - issuing_authority
+    - subdivision_code
+    - issue_date
+    - drivers_license
+    - address
+    - email
+    - phone
+    - inn
+    - card_number
+    - cvv
+    - pin
+    - cardholder_name
+    - snils
+    - oms
+    - foreign_passport
+    - military_id
   load_test:
-    description: "Профиль для нагрузочного тестирования (только regex)"
-    api_key: "pd-proxy-load-test-key"
+    description: Профиль для нагрузочного тестирования (только regex)
+    api_key: pd-proxy-load-test-key
     mode: fast
     masking_style: placeholder
     pd_categories:
-      - fio
-      - passport
-      - phone
-      - email
-      - inn
-      - card_number
-      - snils
-
-# Пользовательские типы ПДн (расширение через конфиг)
-custom_pd_types:
-  # Пример: добавить кастомный тип
-  # - name: "vin_number"
-  #   pattern: "[A-HJ-NPR-Z0-9]{17}"
-  #   description: "VIN-номер автомобиля"
-  #   priority: 50
+    - fio
+    - passport
+    - phone
+    - email
+    - inn
+    - card_number
+    - snils
+custom_pd_types: null

@@ -72,4 +72,30 @@ def load_systems_config(path: str | None = None) -> dict:
     return _systems_config_cache
 
 
+def save_systems_config(config: dict, path: str | None = None) -> None:
+    """Сохранить конфигурацию систем в YAML (с бэкапом и сбросом кэша)."""
+    global _systems_config_cache, _systems_config_mtime
+    if path is None:
+        path = settings.systems_config_path
+    config_path = Path(path)
+    # Бэкап перед перезаписью
+    if config_path.exists():
+        backup_path = config_path.with_suffix(".yaml.bak")
+        import shutil
+        shutil.copy2(config_path, backup_path)
+    # Записываем YAML
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(config_path, "w", encoding="utf-8") as f:
+        yaml.dump(
+            config,
+            f,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
+    # Сброс кэша — следующий load подхватит новый файл
+    _systems_config_cache = None
+    _systems_config_mtime = 0.0
+
+
 settings = Settings()

@@ -285,6 +285,188 @@
             vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Табы */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 0;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            color: #8b949e;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+            bottom: -1px;
+        }
+        .tab:hover { color: #c9d1d9; }
+        .tab.active {
+            background: #161b22;
+            color: #58a6ff;
+            border-color: #30363d;
+            border-bottom-color: #161b22;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Карточки систем */
+        .system-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .system-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+        .system-header:hover { background: rgba(88,166,255,0.04); }
+        .system-header h4 {
+            font-size: 15px;
+            color: #e1e4e8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .system-header h4 .sys-desc {
+            font-weight: 400;
+            font-size: 13px;
+            color: #8b949e;
+        }
+        .system-header .chevron {
+            color: #8b949e;
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        .system-card.open .system-header .chevron { transform: rotate(90deg); }
+        .system-body {
+            display: none;
+            padding: 0 18px 18px;
+        }
+        .system-card.open .system-body { display: block; }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .form-row .control-group { flex: 1; min-width: 180px; }
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 6px;
+        }
+        .cat-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #c9d1d9;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.1s;
+        }
+        .cat-check:hover { background: rgba(88,166,255,0.06); }
+        .cat-check input[type=checkbox] {
+            accent-color: #58a6ff;
+            width: 15px;
+            height: 15px;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #c9d1d9;
+            cursor: pointer;
+        }
+        .toggle-label input[type=checkbox] {
+            accent-color: #238636;
+            width: 16px;
+            height: 16px;
+        }
+
+        .style-preview {
+            font-size: 12px;
+            color: #8b949e;
+            margin-top: 4px;
+            font-family: 'SF Mono', Menlo, monospace;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #21262d;
+        }
+        .btn-danger {
+            background: transparent;
+            color: #da3633;
+            border: 1px solid #da3633;
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+        .btn-danger:hover { background: rgba(218,54,51,0.1); }
+        .lock-icon { color: #8b949e; font-size: 14px; title: 'Система по умолчанию'; }
+
+        .cat-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .cat-toolbar button {
+            font-size: 12px;
+            padding: 4px 10px;
+            background: #21262d;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cat-toolbar button:hover { color: #c9d1d9; border-color: #58a6ff; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 2000;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast.success { background: #238636; color: #fff; }
+        .toast.error { background: #da3633; color: #fff; }
     </style>
 </head>
 <body>
@@ -294,7 +476,16 @@
             <span class="version-badge" id="versionBadge">v...</span>
             <a class="changelog-link">Changelog</a>
         </div>
-        <p class="subtitle">Модуль безопасности персональных данных — тестовая консоль</p>
+        <p class="subtitle">Модуль безопасности персональных данных</p>
+
+        <!-- Табы -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('console')">🔍 Консоль</button>
+            <button class="tab" onclick="switchTab('settings')">⚙️ Настройки систем</button>
+        </div>
+
+        <!-- Вкладка: Консоль -->
+        <div id="tabConsole" class="tab-content active">
 
         <div class="changelog-modal" id="changelogModal" onclick="if(event.target===this)this.classList.remove('open')">
             <div class="changelog-content" id="changelogContent">
@@ -341,7 +532,7 @@
                 <div class="example-list">
                     <div class="example-btn" onclick="loadExample(0)">
                         <span class="ex-title">Полный набор ПДн</span>
-                        Иванов Иван Иванович, паспорт 4510 123456, СНИЛС 123-456-789 00, ИНН 123456789012, тел. +7(999)123-45-67, email ivan@mail.ru, карта 4276 1234 5678 9010
+                        Иванов Иван Иванович, паспорт 4510 123456, СНИЛС 123-456-789 64, ИНН 123456789047, тел. +7(999)123-45-67, email ivan@mail.ru, карта 4276 1234 5678 9006
                     </div>
                     <div class="example-btn" onclick="loadExample(1)">
                         <span class="ex-title">Anti-FP тест (не должно маскировать)</span>
@@ -349,11 +540,11 @@
                     </div>
                     <div class="example-btn" onclick="loadExample(2)">
                         <span class="ex-title">Смешанный текст</span>
-                        Уважаемый Петров Сидор Алексеевич! Ваш заказ #12345 отправлен по адресу: г. Санкт-Петербург, ул. Невский проспект, д. 28. Контактный телефон: 89161234567, email: petrov@gmail.com. Оплата картой 5536 9137 1234 5678.
+                        Клиент Петров Сергей Алексеевич, заказ #12345 отправлен по адресу: г. Санкт-Петербург, ул. Невский проспект, д. 28. Контактный телефон: 89161234567, email: petrov@gmail.com. Оплата картой 5536 9137 1234 8941.
                     </div>
                     <div class="example-btn" onclick="loadExample(3)">
                         <span class="ex-title">Медицинские/финансовые данные</span>
-                        Пациент Козлова Анна Петровна, полис ОМС 1234567890123456, СНИЛС 098-765-432 10, дата рождения 15.03.1985. Водительское удостоверение 77 14 567890.
+                        Пациент Козлова Анна Петровна, полис ОМС 1234567890123456, СНИЛС 098-765-432 38, дата рождения 15.03.1985. Водительское удостоверение 77 14 567890.
                     </div>
                 </div>
             </details>
@@ -368,14 +559,51 @@
             <div class="stats-grid" id="statsGrid"></div>
             <div class="categories" id="categoriesList"></div>
         </div>
+
+        </div><!-- /tabConsole -->
+
+        <!-- Вкладка: Настройки систем -->
+        <div id="tabSettings" class="tab-content">
+            <div class="panel">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                    <h3 style="font-size:18px;color:#e1e4e8">Системы-потребители</h3>
+                    <button class="btn-primary" onclick="showAddSystemModal()" style="padding:8px 16px;font-size:13px">
+                        + Добавить систему
+                    </button>
+                </div>
+                <div id="systemsList"></div>
+            </div>
+        </div><!-- /tabSettings -->
+
+        <!-- Модал добавления системы -->
+        <div class="changelog-modal" id="addSystemModal" onclick="if(event.target===this)this.classList.remove('open')">
+            <div class="changelog-content" style="max-width:420px">
+                <button class="changelog-close" onclick="document.getElementById('addSystemModal').classList.remove('open')">&#10005; Закрыть</button>
+                <h2 style="margin-top:0">Новая система</h2>
+                <div class="control-group" style="margin-bottom:12px">
+                    <label>ID системы (a-z, 0-9, _, -)</label>
+                    <input type="text" id="newSystemId" placeholder="my-system" style="width:100%" />
+                </div>
+                <div class="control-group" style="margin-bottom:16px">
+                    <label>Описание</label>
+                    <input type="text" id="newSystemDesc" placeholder="Описание системы" style="width:100%" />
+                </div>
+                <button class="btn-primary" onclick="createSystem()" style="width:100%">Создать</button>
+                <div id="addSystemError" style="color:#da3633;font-size:13px;margin-top:8px"></div>
+            </div>
+        </div>
+
+        <!-- Toast-уведомление -->
+        <div id="toast" class="toast"></div>
+
     </div>
 
     <script>
         const examples = [
-            'Иванов Иван Иванович, паспорт 4510 123456, СНИЛС 123-456-789 00, ИНН 123456789012, тел. +7(999)123-45-67, email ivan@mail.ru, карта 4276 1234 5678 9010, адрес: г. Москва, ул. Ленина, д. 15, кв. 42',
+            'Иванов Иван Иванович, паспорт 4510 123456, СНИЛС 123-456-789 64, ИНН 123456789047, тел. +7(999)123-45-67, email ivan@mail.ru, карта 4276 1234 5678 9006, адрес: г. Москва, ул. Ленина, д. 15, кв. 42',
             'Александр Сергеевич Пушкин написал Евгения Онегина в 1833 году. ООО Ромашка зарегистрировано в Москве. Позвоните по номеру 112.',
-            'Уважаемый Петров Сидор Алексеевич! Ваш заказ #12345 отправлен по адресу: г. Санкт-Петербург, ул. Невский проспект, д. 28. Контактный телефон: 89161234567, email: petrov@gmail.com. Оплата картой 5536 9137 1234 5678.',
-            'Пациент Козлова Анна Петровна, полис ОМС 1234567890123456, СНИЛС 098-765-432 10, дата рождения 15.03.1985. Водительское удостоверение 77 14 567890.'
+            'Клиент Петров Сергей Алексеевич, заказ #12345 отправлен по адресу: г. Санкт-Петербург, ул. Невский проспект, д. 28. Контактный телефон: 89161234567, email: petrov@gmail.com. Оплата картой 5536 9137 1234 8941.',
+            'Пациент Козлова Анна Петровна, полис ОМС 1234567890123456, СНИЛС 098-765-432 38, дата рождения 15.03.1985. Водительское удостоверение 77 14 567890.'
         ];
 
         const CATEGORY_LABELS = {
@@ -544,6 +772,228 @@
         });
 
         checkHealth();
+
+        // ═══ Табы ═══
+        function switchTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const idx = name === 'console' ? 0 : 1;
+            document.querySelectorAll('.tab')[idx].classList.add('active');
+            document.getElementById(name === 'console' ? 'tabConsole' : 'tabSettings').classList.add('active');
+            if (name === 'settings') loadSystems();
+        }
+
+        // ═══ Toast ═══
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ═══ Настройки систем ═══
+        let _allCategories = [];
+        let _allStyles = [];
+
+        const STYLE_PREVIEWS = {
+            placeholder: 'Иванов → [FIO_1]',
+            typed: 'Иванов → [ФИО:И. И. И.]',
+            partial: 'Иванов → И****в',
+        };
+
+        async function loadSystems() {
+            const url = document.getElementById('serverUrl').value;
+            try {
+                const [sysR, catR, styR] = await Promise.all([
+                    fetch(`${url}/admin/systems`),
+                    fetch(`${url}/admin/pd-categories`),
+                    fetch(`${url}/admin/masking-styles`),
+                ]);
+                const sysD = await sysR.json();
+                const catD = await catR.json();
+                const styD = await styR.json();
+                _allCategories = catD.categories || [];
+                _allStyles = styD.styles || [];
+                renderSystems(sysD.systems || {});
+            } catch (e) {
+                document.getElementById('systemsList').innerHTML =
+                    `<p style="color:#da3633">Не удалось загрузить: ${e.message}</p>`;
+            }
+        }
+
+        function renderSystems(systems) {
+            const el = document.getElementById('systemsList');
+            if (!Object.keys(systems).length) {
+                el.innerHTML = '<p style="color:#8b949e">Нет настроенных систем</p>';
+                return;
+            }
+            el.innerHTML = Object.entries(systems).map(([sid, cfg]) => renderSystemCard(sid, cfg)).join('');
+        }
+
+        function renderSystemCard(sid, cfg) {
+            const isDefault = sid === 'default';
+            const cats = cfg.pd_categories || [];
+            const style = cfg.masking_style || 'placeholder';
+            const mode = cfg.mode || 'full';
+            const desc = cfg.description || '';
+            const allowDemask = cfg.allow_demasking || false;
+
+            const catChecks = _allCategories.map(c => {
+                const checked = cats.includes(c.id) ? 'checked' : '';
+                return `<label class="cat-check"><input type="checkbox" value="${c.id}" ${checked} />${c.label}</label>`;
+            }).join('');
+
+            const styleOpts = _allStyles.map(s =>
+                `<option value="${s.id}" ${s.id === style ? 'selected' : ''}>${s.id}</option>`
+            ).join('');
+
+            return `
+            <div class="system-card" id="card-${sid}">
+                <div class="system-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h4>
+                        ${isDefault ? '🔒' : '📦'} ${sid}
+                        <span class="sys-desc">${desc}</span>
+                    </h4>
+                    <span class="chevron">▶</span>
+                </div>
+                <div class="system-body">
+                    <div class="form-row">
+                        <div class="control-group">
+                            <label>Описание</label>
+                            <input type="text" id="desc-${sid}" value="${desc}" style="width:100%" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="control-group">
+                            <label>Режим</label>
+                            <select id="mode-${sid}">
+                                <option value="full" ${mode === 'full' ? 'selected' : ''}>full (Regex + FastJev)</option>
+                                <option value="fast" ${mode === 'fast' ? 'selected' : ''}>fast (только Regex)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Стиль маскирования</label>
+                            <select id="style-${sid}" onchange="updatePreview('${sid}')">
+                                ${styleOpts}
+                            </select>
+                            <div class="style-preview" id="preview-${sid}">${STYLE_PREVIEWS[style] || ''}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="demask-${sid}" ${allowDemask ? 'checked' : ''} />
+                            Разрешить демаскирование
+                        </label>
+                    </div>
+                    <div class="control-group" style="margin-bottom:0">
+                        <label>Категории ПДн</label>
+                        <div class="cat-toolbar">
+                            <button onclick="toggleAllCats('${sid}', true)">Выбрать все</button>
+                            <button onclick="toggleAllCats('${sid}', false)">Снять все</button>
+                        </div>
+                        <div class="cat-grid" id="cats-${sid}">
+                            ${catChecks}
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-primary" onclick="saveSystem('${sid}')" style="padding:8px 18px;font-size:13px">
+                            💾 Сохранить
+                        </button>
+                        ${isDefault
+                            ? '<span class="lock-icon" title="Систему default нельзя удалить">🔒</span>'
+                            : `<button class="btn-danger" onclick="deleteSystem('${sid}')">🗑 Удалить</button>`
+                        }
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function updatePreview(sid) {
+            const style = document.getElementById(`style-${sid}`).value;
+            document.getElementById(`preview-${sid}`).textContent = STYLE_PREVIEWS[style] || '';
+        }
+
+        function toggleAllCats(sid, checked) {
+            document.querySelectorAll(`#cats-${sid} input[type=checkbox]`).forEach(cb => cb.checked = checked);
+        }
+
+        async function saveSystem(sid) {
+            const url = document.getElementById('serverUrl').value;
+            const cats = [];
+            document.querySelectorAll(`#cats-${sid} input[type=checkbox]:checked`).forEach(cb => cats.push(cb.value));
+            const body = {
+                description: document.getElementById(`desc-${sid}`).value,
+                mode: document.getElementById(`mode-${sid}`).value,
+                masking_style: document.getElementById(`style-${sid}`).value,
+                pd_categories: cats,
+                allow_demasking: document.getElementById(`demask-${sid}`).checked,
+            };
+            try {
+                const r = await fetch(`${url}/admin/systems/${sid}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const d = await r.json();
+                if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
+                showToast(`Система «${sid}» сохранена`, 'success');
+            } catch (e) {
+                showToast(`Ошибка: ${e.message}`, 'error');
+            }
+        }
+
+        async function deleteSystem(sid) {
+            if (!confirm(`Удалить систему «${sid}»? Это действие нельзя отменить.`)) return;
+            const url = document.getElementById('serverUrl').value;
+            try {
+                const r = await fetch(`${url}/admin/systems/${sid}`, { method: 'DELETE' });
+                const d = await r.json();
+                if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
+                showToast(`Система «${sid}» удалена`, 'success');
+                loadSystems();
+            } catch (e) {
+                showToast(`Ошибка: ${e.message}`, 'error');
+            }
+        }
+
+        function showAddSystemModal() {
+            document.getElementById('newSystemId').value = '';
+            document.getElementById('newSystemDesc').value = '';
+            document.getElementById('addSystemError').textContent = '';
+            document.getElementById('addSystemModal').classList.add('open');
+        }
+
+        async function createSystem() {
+            const sid = document.getElementById('newSystemId').value.trim().toLowerCase();
+            const desc = document.getElementById('newSystemDesc').value.trim();
+            const errEl = document.getElementById('addSystemError');
+            if (!sid) { errEl.textContent = 'Введите ID системы'; return; }
+            if (!/^[a-z0-9][a-z0-9_-]*$/.test(sid)) { errEl.textContent = 'ID: только a-z, 0-9, _, -'; return; }
+            const url = document.getElementById('serverUrl').value;
+            const body = {
+                description: desc || `Система ${sid}`,
+                mode: 'full',
+                masking_style: 'placeholder',
+                pd_categories: _allCategories.map(c => c.id),
+                allow_demasking: false,
+            };
+            try {
+                const r = await fetch(`${url}/admin/systems/${sid}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const d = await r.json();
+                if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
+                document.getElementById('addSystemModal').classList.remove('open');
+                showToast(`Система «${sid}» создана`, 'success');
+                loadSystems();
+            } catch (e) {
+                errEl.textContent = e.message;
+            }
+        }
+
+        checkHealth();
     </script>
 
     <footer class="container" style="margin-top: 32px; padding-bottom: 40px;">
@@ -563,11 +1013,11 @@
                     <tbody>
                         <tr><td>ФИО</td><td>Иванов Иван Иванович</td><td>ст. 3 — идентификация лица</td></tr>
                         <tr><td>Паспорт</td><td>4510 123456</td><td>ст. 3 — документ, удостоверяющий личность</td></tr>
-                        <tr><td>СНИЛС</td><td>123-456-789 00</td><td>ст. 3, Постановление Правительства РФ № 828</td></tr>
+                        <tr><td>СНИЛС</td><td>123-456-789 64</td><td>ст. 3, Постановление Правительства РФ № 828</td></tr>
                         <tr><td>ИНН</td><td>770312345678</td><td>ст. 3 — идентификатор налогоплательщика</td></tr>
                         <tr><td>Телефон</td><td>+7(999)123-45-67</td><td>ст. 3 — контактная информация</td></tr>
                         <tr><td>Email</td><td>ivan@mail.ru</td><td>ст. 3 — контактная информация</td></tr>
-                        <tr><td>Номер карты</td><td>4276 1234 5678 9010</td><td>ст. 3 — финансовые данные</td></tr>
+                        <tr><td>Номер карты</td><td>4276 1234 5678 9006</td><td>ст. 3 — финансовые данные</td></tr>
                         <tr><td>Адрес</td><td>г. Москва, ул. Ленина, д. 15</td><td>ст. 3 — место жительства</td></tr>
                         <tr><td>Дата рождения</td><td>15.03.1985</td><td>ст. 3 — биографические данные</td></tr>
                         <tr><td>Место рождения</td><td>г. Воронеж</td><td>ст. 3 — биографические данные</td></tr>

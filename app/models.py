@@ -90,3 +90,13 @@ class AdminSystemConfig(BaseModel):
     mode: ProcessMode = ProcessMode.FULL
     masking_style: str = "placeholder"
     pd_categories: list[str] = Field(default_factory=list)
+
+
+class SystemConfigUpdate(BaseModel):
+    """Обновление конфигурации системы-потребителя."""
+
+    description: str = Field(default="", description="Описание системы")
+    mode: ProcessMode = Field(default=ProcessMode.FULL, description="Режим: full/fast")
+    masking_style: str = Field(default="placeholder", description="Стиль: placeholder/typed/partial")
+    pd_categories: list[str] = Field(default_factory=list, description="Категории ПДн")
+    allow_demasking: bool = Field(default=False, description="Разрешить демаскирование")
