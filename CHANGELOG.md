@@ -5,6 +5,20 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
 проект придерживается [семантического версионирования](https://semver.org/lang/ru/).
 
+## [0.3.2] — 2026-09-23
+
+### Добавлено
+- CRUD API управления системами: `PUT /admin/systems/{id}`, `DELETE /admin/systems/{id}`
+- Справочные endpoint'ы: `GET /admin/pd-categories`, `GET /admin/masking-styles`
+- Вкладка «⚙️ Настройки систем» в UI — карточки с тогглами, выбором режима, стиля маскирования, категорий ПДн
+- Модель `SystemConfigUpdate`, функция `save_systems_config()` (backup + cache reset)
+- Профили систем `typed` и `load_test` в `config/systems.yaml`
+
+### Исправлено
+- `/proxy` endpoint: `masking_style` из конфига системы теперь передаётся в `mask_text()`
+- Тестовые данные в UI: валидные номера карт (Луна ✓), СНИЛС (КС ✓), ИНН (КС ✓)
+- ФИО в примерах совместимо с anti-FP фильтром ("Клиент" вместо "Уважаемый")
+
 ## [0.3.1] — 2026-09-23
 
 ### Добавлено
