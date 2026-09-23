@@ -157,10 +157,10 @@ ALL_RULES.append(PDRule(
 _FIO_LOWER_CTX = re.compile(
     r"(?:фио|ф\.?и\.?о\.?|клиент|заёмщик|заемщик|владелец|получатель|абонент|пациент|заявитель)"
     r"[\s:]+"
-    rf"({_CYR_WORD_ANY}(?:-{_CYR_WORD_ANY})?)"
+    rf"({_CYR_WORD_ANY}(?:-{_CYR_WORD_ANY})?"
     rf"\s+"
-    rf"({_CYR_WORD_ANY})"
-    rf"(?:\s+({_CYR_WORD_ANY}))?",
+    rf"{_CYR_WORD_ANY}"
+    rf"(?:\s+{_CYR_WORD_ANY})?)",
     re.IGNORECASE | re.UNICODE,
 )
 ALL_RULES.append(PDRule(
@@ -169,6 +169,7 @@ ALL_RULES.append(PDRule(
     description="ФИО в нижнем регистре (с контекстом)",
     priority=75,
     context_required=True,
+    use_group=1,
 ))
 
 # ФИО после «зовут/звать/меня зовут/имя» (любой регистр): «меня зовут андрей Храпков»
@@ -203,6 +204,7 @@ ALL_RULES.append(PDRule(
     description="Дата рождения (цифрами с контекстом)",
     priority=80,
     context_required=True,
+    use_group=1,
 ))
 
 # Текстовая дата с контекстом: «родился 1 января 1990»
@@ -218,6 +220,7 @@ ALL_RULES.append(PDRule(
     description="Дата рождения (текстом с контекстом)",
     priority=80,
     context_required=True,
+    use_group=1,
 ))
 
 # Год рождения: «год рождения 1990»
@@ -233,6 +236,7 @@ ALL_RULES.append(PDRule(
     description="Год рождения",
     priority=60,
     context_required=True,
+    use_group=1,
 ))
 
 # Дата рождения с постфиксом: «01.07.1980 г.р.»
@@ -246,6 +250,7 @@ ALL_RULES.append(PDRule(
     description="Дата рождения (постфикс г.р.)",
     priority=80,
     context_required=True,
+    use_group=1,
 ))
 
 # ISO-формат даты рождения с контекстом: «дата рождения 1990.01.15», «born 1990-01-15»
@@ -261,6 +266,7 @@ ALL_RULES.append(PDRule(
     description="Дата рождения (ISO yyyy.mm.dd / yyyy-mm-dd с контекстом)",
     priority=80,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 3. Место рождения (birth_place) =====================================
@@ -277,6 +283,7 @@ ALL_RULES.append(PDRule(
     description="Место рождения",
     priority=70,
     context_required=True,
+    use_group=1,
 ))
 
 # Место рождения: «Родилась 10.12.1995 в г. Новосибирске» (дата между глаголом и местом)
@@ -300,10 +307,9 @@ ALL_RULES.append(PDRule(
 _PASSPORT_CTX = re.compile(
     r"(?:паспорт(?:а|ные\s+данные)?(?:\s+гражданина\s+РФ)?|серия(?:\s+и\s+номер)?|passport)"
     r"[\s:,.]*"
-    r"(?:серия\s+)?"
-    r"(\d{2}\s*\d{2})"
+    r"((?:серия\s+)?\d{2}\s*\d{2}"
     r"\s*(?:номер|№)?\s*"
-    r"(\d{6})",
+    r"\d{6})",
     re.IGNORECASE,
 )
 ALL_RULES.append(PDRule(
@@ -312,6 +318,7 @@ ALL_RULES.append(PDRule(
     description="Паспорт с контекстным словом",
     priority=90,
     context_required=True,
+    use_group=1,
 ))
 
 # Слитный формат (10 цифр) с контекстом: «паспорт 4510123456»
@@ -327,6 +334,7 @@ ALL_RULES.append(PDRule(
     description="Паспорт слитный (10 цифр) с контекстом",
     priority=85,
     context_required=True,
+    use_group=1,
 ))
 
 # Без контекста: формат «4509 123456» (4 + пробелы + 6)
@@ -354,6 +362,7 @@ ALL_RULES.append(PDRule(
     description="Гражданство",
     priority=60,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 6. Орган выдачи (issuing_authority) ==================================
@@ -420,6 +429,7 @@ ALL_RULES.append(PDRule(
     description="Код подразделения с контекстом",
     priority=70,
     context_required=True,
+    use_group=1,
 ))
 
 _SUBDIVISION_CODE_BARE = re.compile(
@@ -446,6 +456,7 @@ ALL_RULES.append(PDRule(
     description="Дата выдачи документа",
     priority=70,
     context_required=True,
+    use_group=1,
 ))
 
 # Дата выдачи — дата рядом с «выдан» (дата после органа)
@@ -478,6 +489,7 @@ ALL_RULES.append(PDRule(
     description="Дата выдачи документа (текстом)",
     priority=70,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 9. Водительское удостоверение (drivers_license) ======================
@@ -487,7 +499,7 @@ _DRIVERS_LICENSE = re.compile(
     r"|в/?у\b|ВУ\b|права\b)"
     r"(?:\s+сери[ияей]+)?"
     r"[\s:№#]*"
-    r"(?:(?:серия\s+)?\d{2}\s+\d{2}\s+(?:(?:номер|№)\s*)?\d{6}"
+    r"((?:серия\s+)?\d{2}\s+\d{2}\s+(?:(?:номер|№)\s*)?\d{6}"
     r"|(?:серия\s+)?\d{2}\s*\d{2}\s*(?:(?:номер|№)\s*)?\d{6}"
     r"|\d{2}\s?[А-ЯA-Z]{2}\s?\d{6}"
     r"|\d{4}\s?\d{6})",
@@ -499,6 +511,7 @@ ALL_RULES.append(PDRule(
     description="Водительское удостоверение",
     priority=92,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 10. Адрес (address) =================================================
@@ -583,6 +596,7 @@ ALL_RULES.append(PDRule(
     description="Адрес с контекстным словом",
     priority=62,
     context_required=True,
+    use_group=1,
 ))
 
 # Адрес с указанием города + области
@@ -612,6 +626,7 @@ ALL_RULES.append(PDRule(
     description="Почтовый индекс с контекстом",
     priority=50,
     context_required=True,
+    use_group=1,
 ))
 
 # Адрес: индекс + город
@@ -691,6 +706,7 @@ ALL_RULES.append(PDRule(
     description="ИНН физлица (12 цифр) с контекстом",
     priority=85,
     context_required=True,
+    use_group=1,
 ))
 
 # ИНН юрлица (10 цифр) с контекстом
@@ -707,6 +723,7 @@ ALL_RULES.append(PDRule(
     description="ИНН юрлица (10 цифр) с контекстом",
     priority=80,
     context_required=True,
+    use_group=1,
 ))
 
 # ИНН без контекста (12 цифр) — ниже приоритет
@@ -746,6 +763,7 @@ ALL_RULES.append(PDRule(
     description="CVV/CVC код карты",
     priority=90,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 16. ПИН-код (pin) ===================================================
@@ -762,6 +780,7 @@ ALL_RULES.append(PDRule(
     description="ПИН-код карты",
     priority=90,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 17. Имя держателя карты (cardholder_name) ===========================
@@ -778,6 +797,7 @@ ALL_RULES.append(PDRule(
     description="Имя держателя карты",
     priority=70,
     context_required=True,
+    use_group=1,
 ))
 
 # Имя держателя (латиница без контекста) — low priority
@@ -817,6 +837,7 @@ ALL_RULES.append(PDRule(
     description="СНИЛС слитный (11 цифр) с контекстом",
     priority=75,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 19. Полис ОМС (oms) =================================================
@@ -843,6 +864,7 @@ ALL_RULES.append(PDRule(
     description="Полис ОМС (16 цифр)",
     priority=95,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 20. Загранпаспорт (foreign_passport) ================================
@@ -851,7 +873,7 @@ _FOREIGN_PASSPORT = re.compile(
     r"(?:загран(?:ичн(?:ый|ого))?\s*\.?\s*паспорт(?:а)?|загранпаспорт|загран\b|з/п\b)"
     r"(?:\s+(?:РФ|нового\s+образца))?"
     r"[\s:№#]*"
-    r"(?:(?:серия\s+)?\d{2}\s*(?:(?:номер|№|No|N|#)\s*)?\d{7}"
+    r"((?:серия\s+)?\d{2}\s*(?:(?:номер|№|No|N|#)\s*)?\d{7}"
     r"|\d{2}\s?\d{7})",
     re.IGNORECASE,
 )
@@ -861,6 +883,7 @@ ALL_RULES.append(PDRule(
     description="Загранпаспорт",
     priority=85,
     context_required=True,
+    use_group=1,
 ))
 
 # ===== 21. Военный билет (military_id) =====================================
@@ -880,4 +903,5 @@ ALL_RULES.append(PDRule(
     description="Военный билет",
     priority=80,
     context_required=True,
+    use_group=1,
 ))
